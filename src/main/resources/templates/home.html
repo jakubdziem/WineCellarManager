@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Wine Cellar Manager</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/product/">
+
+    
+
+    <!-- Bootstrap core CSS -->
+<link th:href="@{/CSS/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/CSS/product.css}" rel="stylesheet">
+  </head>
+  <body style="background-color: #F5F5DC">
+<header class="site-header sticky-top py-1" style="background-color: #F5F5DC">
+  <nav class="container d-flex flex-column flex-md-row justify-content-between">
+    <a class="py-2" th:href="@{home}" aria-label="Product">
+      <img th:src="@{/icons/wine.svg}" width="24" height="24" class="d-block mx-auto" alt="Product">
+    </a>
+    <a class="py-2 d-none d-md-inline-block" th:href="@{home}">Home</a>
+    <a class="py-2 d-none d-md-inline-block" th:href="@{search}">Collars</a>
+    <a class="py-2 d-none d-md-inline-block" th:href="@{collar}">My collar</a>
+    <a class="py-2 d-none d-md-inline-block" th:href="@{login}">Sign in</a>
+    <a class="py-2 d-none d-md-inline-block" th:href="@{register}">Sign up</a>
+  </nav>
+</header>
+
+<main>
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark-overlay">
+      <div class="col-md-5 p-lg-4 mx-auto my-5 bg-wine">
+        <h1 class="display-4 fw-normal">Manage Your Wine Collection</h1>
+        <p class="lead fw-normal">Organize, rate, and track your favorite wines with ease. Start building your personal wine cellar today.</p>
+        <a class="btn btn-light btn-outline-secondary" href="register.html">Create your account</a>
+      </div>
+    </div>
+
+
+
+  <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+    <div class="bg-wine me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
+      <div class="my-3 py-3">
+        <h2 class="display-5">Manage Your Collection</h2>
+        <p class="lead">Track and organize your wine collection with ease. Add, rate, and organize your bottles.</p>
+      </div>
+      <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0; "><img alt= "Cellar with wine bottles." th:src="@{/images/cellar-with-bottles.jpg}" style="width: 100%; height: 300px; border-radius: 21px 21px 0 0;" ></div>
+    </div>
+    <div class="me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden" style="background-color: #D14A4A;">
+      <div class="my-3 p-3">
+        <h2 class="display-5">Add New Bottles</h2>
+        <p class="lead">Easily add wines by providing details like region, winery, and type.</p>
+      </div>
+      <div class="bg-dark shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;"><img alt= "Wine glass and wine bootle on the table." th:src="@{/images/wine-glass-tall.jpg}" style="width: 100%; height: 300px; border-radius: 21px 21px 0 0;" ></div>
+    </div>
+  </div>
+
+  <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+    <div class="me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden" style="background-color: #FFA7D7;">
+      <div class="my-3 p-3">
+        <h2 class="display-5">Rate Your Wines</h2>
+        <p class="lead">Rate your wines from 1 to 5 stars and add tasting notes like aroma, flavor, and pairings.</p>
+      </div>
+      <div class="bg-dark shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;"><img alt= "Three wine glasses and bootle of wine." th:src="@{/images/wine-types.jpg}" style="width: 100%; height: 300px; border-radius: 21px 21px 0 0;" ></div>
+    </div>
+    <div class="bg-wine me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
+      <div class="my-3 py-3">
+        <h2 class="display-5">Plan Tastings</h2>
+        <p class="lead">Schedule tastings and invite friends. Keep track of upcoming events with calendar reminders.</p>
+      </div>
+      <div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;"> <img alt= "Friends drinking wine." th:src="@{/images/friends-wine.jpg}" style="width: 100%; height: 300px; border-radius: 21px 21px 0 0;" ></div>
+    </div>
+  </div>
+
+  <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+    <div class="me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center  text-white overflow-hidden" style="background-color: #D14A4A;">
+      <div class="my-3 p-3">
+        <h2 class="display-5">Filter and Sort Wines</h2>
+        <p class="lead">Browse your collection by vintage, region, type, or price to find the perfect bottle.</p>
+      </div>
+      <div class="bg-body shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;"><img alt= "Wine on shelfs." th:src="@{/images/wine-cat.jpg}" style="width: 100%; height: 300px; border-radius: 21px 21px 0 0;" ></div>
+    </div>
+    <div class="me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden" style="background-color: #FFA7D7;">
+      <div class="my-3 py-3">
+        <h2 class="display-5">Collection Statistics</h2>
+        <p class="lead">Get an overview of your collection's value, average ratings, and the oldest bottle.</p>
+      </div>
+      <div class="bg-body shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;"><img alt= "Wine chart." th:src="@{/images/wine-chart.jpg}" style="width: 100%; height: 300px; border-radius: 21px 21px 0 0;" ></div>
+    </div>
+  </div>
+
+
+</main>
+
+
+<script th:src="@{/JS/bootstrap.bundle.min.js}"></script>
+
+      
+  </body>
+</html>
