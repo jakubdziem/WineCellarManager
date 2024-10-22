@@ -4,7 +4,19 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<link th:href="@{/CSS/bootstrap.min.css}" rel="stylesheet">
 <body>
-
+<header class="site-header sticky-top py-1" style="background-color: #F5F5DC">
+    <nav class="container d-flex flex-column flex-md-row justify-content-between">
+        <a class="py-2" th:href="@{home}" aria-label="Product">
+            <img th:src="@{/icons/wine.svg}" width="24" height="24" class="d-block mx-auto" alt="Logo">
+        </a>
+        <a class="py-2 d-none d-md-inline-block" th:href="@{home}">Home</a>
+        <a class="py-2 d-none d-md-inline-block" th:href="@{search}">Collars</a>
+        <a class="py-2 d-none d-md-inline-block" th:href="@{collar}">My collar</a>
+        <a class="py-2 d-none d-md-inline-block" th:href="@{login}">Sign in</a>
+        <a class="py-2 d-none d-md-inline-block" th:href="@{register}">Sign up</a>
+    </nav>
+</header>
 </body>
 </html>
