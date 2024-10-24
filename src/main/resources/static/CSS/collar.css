@@ -1,0 +1,10 @@
+.card {
+    height: 400px; /* Increase the height */
+}
+
+.card img,
+.card svg {
+    height: 100%; /* Make the image take up the full height */
+    width: auto; /* Keep the aspect ratio */
+    object-fit: cover; /* Make sure the image covers the div, or you can use 'contain' */
+}
