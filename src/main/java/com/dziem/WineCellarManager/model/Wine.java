@@ -3,7 +3,6 @@ package com.dziem.WineCellarManager.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.Year;
 
 @Data
@@ -15,12 +14,14 @@ public class Wine {
     @ManyToOne()
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
-    private BigDecimal price;
+    private String price;
     private Year vintage;
+    @Enumerated(EnumType.STRING)
     private WineType wineType;
     private String region;
     private String winery;
-
+    private String name;
+    private String imageUrl;
     @OneToOne
     @JoinColumn(name = "rating_id", referencedColumnName = "id")
     private Rating rating;
