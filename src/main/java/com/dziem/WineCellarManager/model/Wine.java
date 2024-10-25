@@ -18,6 +18,7 @@ public class Wine {
     private Year vintage;
     @Enumerated(EnumType.STRING)
     private WineType wineType;
+    private String country;
     private String region;
     private String winery;
     private String name;

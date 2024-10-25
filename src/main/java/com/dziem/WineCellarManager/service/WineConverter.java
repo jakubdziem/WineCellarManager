@@ -14,25 +14,36 @@ import java.util.Random;
 @Service
 public class WineConverter {
     private static final int BASE_PRICE = 100;
+    private static final String BASE_LOCATION = "Spain;Empordà";
+    private static final String BASE_WINERY = "Maselva";
     public Wine convertWineDTOToWine(WineDTO wineDTO) {
         Wine wine = new Wine();
 
-        wine.setWinery(wineDTO.getWinery());
         wine.setWineType(wineDTO.getWineType());
-        wine.setRegion(wineDTO.getLocation());
         wine.setImageUrl(wineDTO.getImage());
+
+        String winery = wineDTO.getWinery().isEmpty() ? BASE_WINERY : wineDTO.getWinery();
+        wine.setWinery(winery);
+
+        String location = wineDTO.getLocation().isEmpty() ? BASE_LOCATION : wineDTO.getLocation();
+        String[] countryAndRegion = location.replace("\n", "").replace("·", ";").split(";");
+        wine.setCountry(countryAndRegion[0]);
+        wine.setRegion(countryAndRegion[1]);
+
         String[] wineNameAndWinery = wineDTO.getWine().split(" ");
         String name = "";
         for(int i = 0; i < wineNameAndWinery.length-1; i++) {
             name = name.concat(wineNameAndWinery[i]).concat(i==wineNameAndWinery.length-2 ? "" : " ");
         }
         wine.setName(name);
+
         String yearOrNV = wineNameAndWinery[wineNameAndWinery.length - 1];
         if(yearOrNV.equals("N.V.")) { //no vintage
             wine.setVintage(Year.now());
         } else {
             wine.setVintage(Year.parse(yearOrNV));
         }
+
         BigDecimal price = calculatePrice(wine.getVintage().getValue());
         wine.setPrice(formatPriceAsDollar(price));
         return wine;
