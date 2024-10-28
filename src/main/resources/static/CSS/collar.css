@@ -1,7 +1,6 @@
 .card {
     height: 400px; /* Increase the height */
 }
-
 .card img,
 .card svg {
     height: 100%; /* Make the image take up the full height */
