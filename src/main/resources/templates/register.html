@@ -59,14 +59,6 @@
             <img th:src="@{/icons/wine.svg}" width="72" height="72" class="d-block mx-auto" alt="Product">
             <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
             <div class="form-floating">
-                <input type="text" class="form-control" id="firstName" placeholder="firstName">
-                <label for="firstName">First name</label>
-            </div>
-            <div class="form-floating">
-                <input type="text" class="form-control" id="secondName" placeholder="secondName">
-                <label for="secondName">Second name</label>
-            </div>
-            <div class="form-floating">
                 <input type="text" class="form-control" id="nickname" placeholder="nickname">
                 <label for="nickname">Nickname</label>
             </div>
@@ -77,6 +69,10 @@
             <div class="form-floating">
                 <input type="password" class="form-control" id="password" placeholder="Password">
                 <label for="password">Password</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="repeatPassword" placeholder="Repeat password">
+                <label for="repeatPassword">Repeat password</label>
             </div>
 
             <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>

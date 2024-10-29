@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +21,9 @@ public class WineApiServiceImpl implements WineApiService {
     private final WineConverter wineConverter;
 
     private List<WineDTO> getWinesByType(String url, WineType wineType) {
-        WineDTO[] wineArray = restTemplate.getForObject(url, WineDTO[].class);
-        for(WineDTO wineDTO : wineArray) {
+        Optional<WineDTO[]> optionalWineArray = Optional.ofNullable(restTemplate.getForObject(url, WineDTO[].class));
+        WineDTO[] wineArray = optionalWineArray.orElseGet(() -> new WineDTO[0]);
+        for (WineDTO wineDTO : wineArray) {
             wineDTO.setWineType(wineType);
         }
         return Arrays.asList(wineArray);
