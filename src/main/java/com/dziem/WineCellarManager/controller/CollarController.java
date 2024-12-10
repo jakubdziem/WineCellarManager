@@ -20,11 +20,6 @@ public class CollarController {
     public String getCollarPage() {
         return "collar";
     }
-//    @ModelAttribute("wines")
-//    public List<Wine> getExampleWines() {
-//        System.out.println(wineRepository.findAll().stream().limit(10).toList());
-//        return wineRepository.findAll().stream().limit(10).toList();
-//    }
     @ModelAttribute("wines")
     public Map<WineType, List<Wine>> groupWinesByType() {
         return wineRepository.findAll().stream().skip(717).limit(10).collect(Collectors.groupingBy(Wine::getWineType));

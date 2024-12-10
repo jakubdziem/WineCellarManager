@@ -64,6 +64,16 @@
     </div>
   </section>
 
+  <div class="overlay" id="overlay">
+    <div class="viewButtonReact" id="view">
+      <p>Are you sure you want to proceed?</p>
+      <div class="buttons">
+        <button onclick="cancelView()">Cancel</button>
+        <button onclick="saveView()">Save</button>
+      </div>
+    </div>
+  </div>
+
   <div th:each="type : ${wines}">
     <h2 class="accordion-header" id="heading${type.key}" th:attr="id='heading' + ${type.key}">
       <button class="accordion-button" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#collapse' + ${type.key}" aria-expanded="true" aria-controls="collapse${type.key}">
@@ -84,7 +94,7 @@
                   <p class="card-text" th:text="'Winery: ' + ${wine.winery}">Winery</p>
                   <div class="d-flex justify-content-between align-items-center mt-auto" style="margin-top: 5px;">
                     <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                      <button type="button" onclick="displayView()" class="btn btn-sm btn-outline-secondary">View</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                     </div>
                     <small class="text-muted" th:text="${wine.price}">$105.63</small>
@@ -98,6 +108,7 @@
     </div>
   </div>
 </main>
-
+<script src="/JS/collar.js">
+</script>
 </body>
 </html>
