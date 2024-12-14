@@ -1,6 +1,7 @@
 package com.dziem.WineCellarManager.service;
 
 import com.dziem.WineCellarManager.model.Wine;
+import com.dziem.WineCellarManager.repository.CustomerRepository;
 import com.dziem.WineCellarManager.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RequiredArgsConstructor
 public class WineServiceImpl implements WineService{
     private final WineRepository wineRepository;
+    private final CustomerRepository customerRepository;
     @Override
     public Wine getClickedWineById(Long id) {
         return wineRepository.findById(id).orElse(new Wine());
@@ -42,6 +44,8 @@ public class WineServiceImpl implements WineService{
         wineRepository.findById(id).ifPresentOrElse(
                 (existing) -> {
                     wineRepository.delete(existing);
+                    existing.getCustomer().getWines().remove(existing);
+                    customerRepository.save(existing.getCustomer());
                     result.set(true);
                 }, () -> result.set(false));
         return result.get();

@@ -4,6 +4,7 @@ import com.dziem.WineCellarManager.model.Wine;
 import com.dziem.WineCellarManager.model.WineDTO;
 import com.dziem.WineCellarManager.model.WineType;
 import com.dziem.WineCellarManager.repository.WineRepository;
+import com.dziem.WineCellarManager.utilities.WineConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
