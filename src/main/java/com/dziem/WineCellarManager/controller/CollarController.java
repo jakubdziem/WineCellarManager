@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class CollarController {
     }
     @ModelAttribute("wines")
     public Map<WineType, List<Wine>> groupWinesByType() {
-        return wineRepository.findAll().stream().filter(w -> w.getId() >= 741 && w.getId() <= 750).collect(Collectors.groupingBy(Wine::getWineType));
+        return wineRepository.findAll().stream().filter(w -> w.getId() >= 741 && w.getId() <= 750).sorted(Comparator.comparing(Wine::getId)).collect(Collectors.groupingBy(Wine::getWineType));
     }
     @GetMapping("/viewWine")
     @ResponseBody
@@ -35,6 +36,14 @@ public class CollarController {
     @PutMapping(value = "/updateWine", consumes = "application/json")
     public ResponseEntity<Void> editClickedWineById(@RequestBody Wine wine) {
         if(wineService.editClickedWineById(wine)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @DeleteMapping("/deleteWine")
+    public ResponseEntity<Void> deleteClickedWineById(@RequestParam Long id) {
+        if(wineService.deleteClickedWineById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

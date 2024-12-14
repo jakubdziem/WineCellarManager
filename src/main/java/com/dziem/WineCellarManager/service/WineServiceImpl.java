@@ -35,4 +35,15 @@ public class WineServiceImpl implements WineService{
         () -> result.set(false));
         return result.get();
     }
+
+    @Override
+    public boolean deleteClickedWineById(Long id) {
+        AtomicBoolean result = new AtomicBoolean(false);
+        wineRepository.findById(id).ifPresentOrElse(
+                (existing) -> {
+                    wineRepository.delete(existing);
+                    result.set(true);
+                }, () -> result.set(false));
+        return result.get();
+    }
 }
