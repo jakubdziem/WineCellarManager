@@ -1,5 +1,6 @@
 package com.dziem.WineCellarManager.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class Customer {
     private String password;
     private String nickname;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
 //    @JsonManagedReference
     private List<Wine> wines;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

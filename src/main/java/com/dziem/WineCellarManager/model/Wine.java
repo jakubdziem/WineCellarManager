@@ -1,5 +1,6 @@
 package com.dziem.WineCellarManager.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class Wine {
     private Long id;
     @ManyToOne()
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @JsonIgnore
     private Customer customer;
     private String price;
     private Year vintage;
