@@ -156,4 +156,155 @@
     height: 700px;
 }
 
+/* Style for Delete Button */
+.delete-button {
+    position: absolute; /* Positioned relative to the card */
+    top: 10px; /* Slightly away from the top */
+    right: 10px; /* Slightly away from the right */
+    background-color: red; /* Red background */
+    color: white; /* White emoji or text */
+    border: none; /* Remove default border */
+    border-radius: 50%; /* Make it circular */
+    padding: 8px; /* Size of the button */
+    font-size: 1.2rem; /* Size of the emoji or text */
+    cursor: pointer; /* Pointer cursor for interaction */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for aesthetics */
+    z-index: 10; /* Ensure it appears above the image */
+    display: flex; /* Align content in the center */
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+}
 
+.delete-button:hover {
+    background-color: #a71d2a; /* Darker red for hover */
+}
+
+.card-img-top {
+    width: auto; /* Let the image's width adapt naturally */
+    height: auto; /* Maintain the original aspect ratio */
+    max-width: 100%; /* Prevent the image from exceeding the card width */
+    max-height: 225px; /* Limit the height to ensure it fits within the card */
+    display: block; /* Center the image inside the card */
+    margin: 0 auto; /* Horizontally center the image */
+    object-fit: contain; /* Ensure the entire image is visible without cropping */
+}
+#deleteDecisionOverlay .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+#deleteDecisionOverlay .buttons button {
+    padding: 10px 30px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 150px;
+}
+
+#deleteDecisionOverlay .buttons button:nth-child(1) { /* Confirm button */
+    background-color: #dc3545; /* Red for danger */
+    color: white;
+}
+
+#deleteDecisionOverlay .buttons button:nth-child(1):hover {
+    background-color: #a71d2a;
+}
+
+#deleteDecisionOverlay .buttons button:nth-child(2) { /* Cancel button */
+    background-color: #6c757d; /* Gray for cancel */
+    color: white;
+}
+
+#deleteDecisionOverlay .buttons button:nth-child(2):hover {
+    background-color: #5a6268;
+}
+#deleteDecisionOverlay .viewButtonReact {
+    width: 300px; /* Narrower width for delete popup */
+    height: 150px; /* Adjust dynamically based on content */
+    padding: 20px; /* Adequate padding */
+    gap: 15px; /* Adds spacing between elements */
+    display: flex;
+    flex-direction: column; /* Ensures vertical alignment of text and buttons */
+    justify-content: space-between; /* Distribute elements, keeping buttons at the bottom */
+    align-items: center; /* Center align content horizontally */
+    box-sizing: border-box; /* Include padding in total height/width */
+}
+
+#deleteDecisionOverlay .viewButtonReact h5{
+    text-align: center; /* Centers the text */
+    margin: 0 0 10px; /* Adds margin below the text */
+    word-wrap: break-word; /* Prevents text overflow */
+}
+
+#deleteDecisionOverlay .buttons {
+    width: 100%; /* Buttons span full container width */
+    display: flex; /* Flex container for buttons */
+    justify-content: center; /* Center buttons horizontally */
+    gap: 10px; /* Smaller gap between buttons */
+    margin-top: 40px; /* Add space above buttons */
+    padding-top: 10px; /* Add padding for separation from text */
+}
+
+#deleteDecisionOverlay .buttons button {
+    padding: 8px 20px; /* Smaller button size */
+    font-size: 0.85rem; /* Slightly smaller font size */
+    border: none; /* Remove border */
+    border-radius: 6px; /* Subtle rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100px; /* Smaller button width */
+}
+/* Style for Accordion Header */
+.accordion-header {
+    /*background: linear-gradient(135deg, #ff7f50, #ff6347); !* Gradient background *!*/
+    background-color: #F5F5DC;
+    border-radius: 8px; /* Rounded corners */
+    margin-bottom: 5px; /* Space between headers */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    padding: 10px; /* Padding for some space around text */
+}
+
+/* Style for Accordion Button */
+.accordion-button {
+    background-color: transparent; /* Transparent background to show gradient */
+    /*color: #fff; !* White text color *!*/
+    color: #800000;
+    font-size: 1.2rem; /* Slightly larger font size */
+    font-weight: 500; /* Medium weight for text */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners for button */
+    padding: 10px 20px; /* Padding for more space */
+    transition: all 0.3s ease; /* Smooth transition on hover */
+}
+
+/* Hover effect on Accordion Button */
+.accordion-button:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly darken on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Style for Accordion Button Text */
+.accordion-button span {
+    font-size: 1.25rem; /* Increase font size for better readability */
+    font-weight: 600; /* Make the wine type bold */
+    letter-spacing: 1px; /* Add some spacing between letters */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
+}
+
+/* Adjust collapse content when open */
+.accordion-collapse.show {
+    transition: all 0.3s ease; /* Smooth transition for content */
+    padding: 20px; /* Add padding when open */
+}
+
+/* Focus effect on Accordion Button (when clicked or focused) */
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Blue focus outline */
+    border-color: #007bff; /* Blue border on focus */
+}
