@@ -1,4 +1,4 @@
-package com.dziem.WineCellarManager.service;
+package com.dziem.WineCellarManager.utilities;
 
 import com.dziem.WineCellarManager.model.Wine;
 import com.dziem.WineCellarManager.model.WineDTO;
