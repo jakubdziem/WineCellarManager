@@ -52,7 +52,25 @@ document.getElementById("editOverlay").addEventListener("click", function (event
         cancelEdit();
     }
 });
+document.getElementById("deleteDecisionOverlay").addEventListener("click", function (event) {
+    if (!event.target.closest("#deleteDecision")) {
+        cancelDelete();
+    }
+});
 
+function restoreScrollPosition() {
+    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+    if (savedScrollPosition !== null) {
+        // Restore the scroll position
+        window.scrollTo(0, savedScrollPosition);
+        sessionStorage.removeItem('scrollPosition');  // Clear saved position
+    }
+}
+
+// Call this function when the page is loaded
+window.onload = function() {
+    restoreScrollPosition();
+};
 async function displayEdit(id) {
     // Fetch the clicked wine details
     const response = await fetch('/viewWine?id=' + id);
@@ -161,3 +179,53 @@ async function saveEdit(id) {
         console.error("Error updating wine");
     }
 }
+
+function deleteWine(id) {
+    // Get the overlay and delete confirmation modal elements
+    const overlay = document.getElementById("deleteDecisionOverlay");
+    const deletePopUp = document.getElementById("deleteDecision");
+
+    // Populate the delete confirmation modal
+    deletePopUp.innerHTML = `
+        <h5>Are you sure you want to delete this wine?</h5>
+        <div class="buttons">
+            <button type="button" onclick="confirmDelete(${id})">Yes, Delete</button>
+            <button type="button" onclick="cancelDelete()">Cancel</button>
+        </div>
+    `;
+
+    // Show the modal by adding the 'active' class
+    overlay.classList.add("active");
+    deletePopUp.classList.add("active");
+}
+
+// Cancel Delete Action
+function cancelDelete() {
+    const overlay = document.getElementById("deleteDecisionOverlay");
+    const deletePopUp = document.getElementById("deleteDecision");
+
+    // Hide the modal by removing the 'active' class
+    overlay.classList.remove("active");
+    deletePopUp.classList.remove("active");
+}
+
+// Confirm Delete Action
+async function confirmDelete(id) {
+    // Send a delete request to the server
+    const response = await fetch('/deleteWine?id=' + id, {
+        method: 'DELETE'
+    });
+
+    if (response.ok) {
+        // Successfully deleted the wine, close the modal
+        console.log("Wine deleted successfully");
+        cancelDelete();
+
+        // Optionally, refresh the page or remove the deleted wine from the DOM
+        location.reload();
+    } else {
+        console.error("Error deleting wine");
+    }
+}
+
+
