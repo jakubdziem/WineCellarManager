@@ -54,12 +54,15 @@
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">Wine Collection</h1>
-        <p class="lead text-muted">Explore our curated selection of fine wines from various regions. Discover the perfect wine for any occasion.</p>
-        <p>
-          <a href="#" class="btn btn-primary my-2">Explore Wines</a>
-          <a href="#" class="btn btn-secondary my-2">Learn More</a>
-        </p>
+        <h1 class="fw-light" th:text="${customer.nickname}">User name</h1>
+        <p class="lead text-muted" th:text="'Wines count:' + ${customer.numberOfWines}"></p>
+        <p class="lead text-muted" th:text="'Ratings count:' + ${customer.numberOfRatings}"></p>
+        <p class="lead text-muted" th:text="'Wine with oldest vintage:' + ${customer.wineWithOldestVintage.name}"></p>
+        <p class="lead text-muted" th:text="'Favorite region:' + ${customer.favoriteRegion}"></p>
+        <p class="lead text-muted" th:text="'Favorite country:' + ${customer.favoriteCountry}"></p>
+        <p class="lead text-muted" th:text="'Favorite winery:' + ${customer.favoriteWinery}"></p>
+        <p class="lead text-muted" th:text="'Favorite wine type:' + ${customer.favoriteWineType}"></p>
+        <p class="lead text-muted" th:text="'Collar Price:' + ${customer.priceOfCollar}"></p>
       </div>
     </div>
   </section>
