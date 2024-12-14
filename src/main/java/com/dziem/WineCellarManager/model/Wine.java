@@ -25,7 +25,7 @@ public class Wine {
     private String winery;
     private String name;
     private String imageUrl;
-    @OneToOne
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "rating_id", referencedColumnName = "id")
     private Rating rating;
 }
