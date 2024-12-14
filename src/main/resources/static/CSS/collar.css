@@ -1,3 +1,4 @@
+
 .card {
     height: 400px; /* Increase the height */
 }
@@ -9,31 +10,74 @@
 }
 
 .viewButtonReact {
-    position: fixed; /* Keeps the div centered relative to the viewport */
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    visibility: hidden;
+    visibility: hidden; /* Default hidden */
     background-color: white;
-    width: 300px;
-    height: 200px;
-    z-index: 1050; /* High z-index to appear on top of other content */
+    width: 600px;
+    height: 500px;
+    z-index: 1050; /* Higher than overlay */
     box-shadow: 4px 10px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
 }
 
-.viewButtonReact.active {
-    visibility: visible;
+.viewButtonReact img {
+    height: 40%; /* 40% of the parent div's height */
+    max-width: 90%; /* Ensures the image doesn't stretch beyond its natural width or the container width */
+    object-fit: contain; /* Keeps the image's original aspect ratio and fits it within the dimensions */
+    border-radius: 8px; /* Optional: Adds rounded corners */
+    margin: 0 auto; /* Centers the image horizontally */
 }
-
 
 .viewButtonReact .buttons {
+    width: 100%; /* Full container width */
     display: flex;
-    justify-content: space-between; /* Align buttons to opposite ends */
+    justify-content: center; /* Center-aligns the button */
+    position: absolute; /* Positions the button relative to the parent */
+    bottom: 20px; /* Distance from the bottom of the container */
+}
+.viewButtonReact .buttons button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #007bff; /* Blue button */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.viewButtonReact .buttons button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.viewButtonReact h5,
+.viewButtonReact p {
+    text-align: center; /* Centers the text */
+    margin: 0; /* Removes default margins for a cleaner look */
+}
+
+.viewButtonReact h5 {
+    font-size: 1.25rem; /* Slightly larger font for the title */
+    font-weight: bold; /* Makes the title stand out */
+}
+
+.viewButtonReact p {
+    font-size: 1rem; /* Standard font size for paragraphs */
+    color: #555; /* Softer text color */
+}
+.viewButtonReact.active {
+    visibility: visible; /* Make visible */
+    opacity: 1; /* Optional: Smooth appearance */
+    transition: opacity 0.3s ease-in-out; /* Smooth transition for visibility */
 }
 
 .overlay {
@@ -43,10 +87,73 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1040; /* Slightly lower than the popup */
+    z-index: 1040; /* Lower than popup */
     visibility: hidden;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease-in-out; /* Smooth transition */
 }
 
 .overlay.active {
-    visibility: visible; /* Make it visible when active */
+    visibility: visible; /* Make it visible */
+    opacity: 1; /* Fully visible */
 }
+
+#editOverlay .viewButtonReact {
+    padding: 20px;
+    gap: 10px;
+}
+
+#editOverlay input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#editOverlay form {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to the next row */
+    gap: 20px; /* Adds spacing between inputs */
+}
+
+#editOverlay form .mb-3 {
+    flex: 1 1 calc(50% - 20px); /* Each input takes 50% of the width minus gap */
+    min-width: 200px; /* Ensure a minimum width for smaller screens */
+}
+
+#editOverlay .buttons {
+    display: flex; /* Use flexbox to align buttons */
+    justify-content: center; /* Center the buttons in the container */
+    gap: 20px; /* Add spacing between the buttons */
+    margin-top: 20px; /* Add some space above the button row */
+}
+
+#editOverlay .buttons button {
+    padding: 10px 30px; /* Uniform button size */
+    font-size: 1rem;
+    background-color: #007bff; /* Blue color for buttons */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 120px; /* Fixed button width for consistent size */
+}
+
+#editOverlay .buttons button:nth-child(2) { /* Cancel button styling */
+    background-color: #dc3545; /* Red color for Cancel button */
+}
+
+#editOverlay .buttons button:nth-child(2):hover {
+    background-color: #a71d2a; /* Darker red on hover */
+}
+
+#editOverlay .buttons button:nth-child(1):hover {
+    background-color: #125ca8; /* Darker blue on hover */
+}
+#edit {
+    height: 700px;
+}
+
+
