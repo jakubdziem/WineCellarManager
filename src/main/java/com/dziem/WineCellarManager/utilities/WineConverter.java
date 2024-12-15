@@ -1,7 +1,7 @@
 package com.dziem.WineCellarManager.utilities;
 
 import com.dziem.WineCellarManager.model.Wine;
-import com.dziem.WineCellarManager.model.WineDTO;
+import com.dziem.WineCellarManager.model.WineFromApiDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,21 +16,21 @@ public class WineConverter {
     private static final int BASE_PRICE = 100;
     private static final String BASE_LOCATION = "Spain;Empordà";
     private static final String BASE_WINERY = "Maselva";
-    public Wine convertWineDTOToWine(WineDTO wineDTO) {
+    public Wine convertWineDTOToWine(WineFromApiDTO wineFromApiDTO) {
         Wine wine = new Wine();
 
-        wine.setWineType(wineDTO.getWineType());
-        wine.setImageUrl(wineDTO.getImage());
+        wine.setWineType(wineFromApiDTO.getWineType());
+        wine.setImageUrl(wineFromApiDTO.getImage());
 
-        String winery = wineDTO.getWinery().isEmpty() ? BASE_WINERY : wineDTO.getWinery();
+        String winery = wineFromApiDTO.getWinery().isEmpty() ? BASE_WINERY : wineFromApiDTO.getWinery();
         wine.setWinery(winery);
 
-        String location = wineDTO.getLocation().isEmpty() ? BASE_LOCATION : wineDTO.getLocation();
+        String location = wineFromApiDTO.getLocation().isEmpty() ? BASE_LOCATION : wineFromApiDTO.getLocation();
         String[] countryAndRegion = location.replace("\n", "").replace("·", ";").split(";");
         wine.setCountry(countryAndRegion[0]);
         wine.setRegion(countryAndRegion[1]);
 
-        String[] wineNameAndWinery = wineDTO.getWine().split(" ");
+        String[] wineNameAndWinery = wineFromApiDTO.getWine().split(" ");
         String name = "";
         for(int i = 0; i < wineNameAndWinery.length-1; i++) {
             name = name.concat(wineNameAndWinery[i]).concat(i==wineNameAndWinery.length-2 ? "" : " ");

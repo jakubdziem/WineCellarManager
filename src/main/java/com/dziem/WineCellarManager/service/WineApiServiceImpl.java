@@ -1,7 +1,7 @@
 package com.dziem.WineCellarManager.service;
 
 import com.dziem.WineCellarManager.model.Wine;
-import com.dziem.WineCellarManager.model.WineDTO;
+import com.dziem.WineCellarManager.model.WineFromApiDTO;
 import com.dziem.WineCellarManager.model.WineType;
 import com.dziem.WineCellarManager.repository.WineRepository;
 import com.dziem.WineCellarManager.utilities.WineConverter;
@@ -21,17 +21,17 @@ public class WineApiServiceImpl implements WineApiService {
     private final RestTemplate restTemplate;
     private final WineConverter wineConverter;
 
-    private List<WineDTO> getWinesByType(String url, WineType wineType) {
-        Optional<WineDTO[]> optionalWineArray = Optional.ofNullable(restTemplate.getForObject(url, WineDTO[].class));
-        WineDTO[] wineArray = optionalWineArray.orElseGet(() -> new WineDTO[0]);
-        for (WineDTO wineDTO : wineArray) {
-            wineDTO.setWineType(wineType);
+    private List<WineFromApiDTO> getWinesByType(String url, WineType wineType) {
+        Optional<WineFromApiDTO[]> optionalWineArray = Optional.ofNullable(restTemplate.getForObject(url, WineFromApiDTO[].class));
+        WineFromApiDTO[] wineArray = optionalWineArray.orElseGet(() -> new WineFromApiDTO[0]);
+        for (WineFromApiDTO wineFromApiDTO : wineArray) {
+            wineFromApiDTO.setWineType(wineType);
         }
         return Arrays.asList(wineArray);
     }
     @Override
-    public List<WineDTO> getWines() {
-        List<WineDTO> allWines = new ArrayList<>();
+    public List<WineFromApiDTO> getWines() {
+        List<WineFromApiDTO> allWines = new ArrayList<>();
         String url = "https://api.sampleapis.com/wines/";
         for(WineType wineType : WineType.values()) {
             String type = wineType.toString().toLowerCase();
@@ -45,10 +45,10 @@ public class WineApiServiceImpl implements WineApiService {
 
     @Override
     public void loadWinesToDB() {
-        List<WineDTO> winesDTO = getWines();
+        List<WineFromApiDTO> winesDTO = getWines();
         List<Wine> wines = new ArrayList<>();
-        for(WineDTO wineDTO : winesDTO) {
-            wines.add(wineConverter.convertWineDTOToWine(wineDTO));
+        for(WineFromApiDTO wineFromApiDTO : winesDTO) {
+            wines.add(wineConverter.convertWineDTOToWine(wineFromApiDTO));
         }
         wineRepository.saveAll(wines);
     }

@@ -3,7 +3,7 @@ package com.dziem.WineCellarManager.model;
 import lombok.Data;
 
 @Data
-public class WineDTO {
+public class WineFromApiDTO {
     private String winery;
     private String wine;
     private String location;

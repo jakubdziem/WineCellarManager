@@ -1,9 +1,9 @@
 package com.dziem.WineCellarManager.service;
 
-import com.dziem.WineCellarManager.model.WineDTO;
+import com.dziem.WineCellarManager.model.WineFromApiDTO;
 
 import java.util.List;
 public interface WineApiService {
-    List<WineDTO> getWines();
+    List<WineFromApiDTO> getWines();
     void loadWinesToDB();
 }
