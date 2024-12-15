@@ -180,6 +180,143 @@ async function saveEdit(id) {
     }
 }
 
+async function rateWine(id, stars) {
+    // Send POST request to save the rating
+    const response = await fetch('/rateWine', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ wineId: id, ratingStars: stars })
+    });
+
+    if (response.ok) {
+        console.log(`Wine ${id} rated with ${stars} stars`);
+        location.reload(); // Refresh the page to reflect the updated rating
+    } else {
+        console.error('Error saving rating');
+    }
+}
+
+async function displayRatingPopup(id) {
+    // Fetch the wine details and its rating
+    const response = await fetch(`/getWineRating?wineId=${id}`); // Adjust the endpoint accordingly
+
+    if (response.ok) {
+        const ratingData = await response.json(); // Expect { hasRating: true/false, ratingStars, flavour, aroma, agingTime, suggestedFoodPairings } }
+        const overlay = document.getElementById("ratingOverlay");
+        const ratingPopUp = document.getElementById("ratingPopUp");
+
+        if (ratingData.hasRating) {
+            // Display the existing rating (non-editable)
+            ratingPopUp.innerHTML = `
+                <div>
+                    <h3>Rating Details</h3>
+                    <p><strong>Stars:</strong> ${ratingData.ratingStars}</p>
+                    <p><strong>Flavour:</strong> ${ratingData.flavour}</p>
+                    <p><strong>Aroma:</strong> ${ratingData.aroma}</p>
+                    <p><strong>Aging Time:</strong> ${ratingData.agingTime} years</p>
+                    <p><strong>Suggested Food Pairings:</strong> ${ratingData.suggestedFoodPairings}</p>
+                    <button onclick="cancelRating()">Close</button>
+                </div>
+            `;
+        } else {
+            // Display the form for submitting a rating
+            ratingPopUp.innerHTML = `
+                <div>
+                    <h3>Submit Your Rating</h3>
+                    <form id="ratingForm">
+                        <label for="ratingStars">Stars (1-5):</label>
+                        <input type="number" id="ratingStars" name="ratingStars" min="1" max="5" required />
+
+                        <label for="flavour">Flavour:</label>
+                        <input type="text" id="flavour" name="flavour" placeholder="E.g., Fruity, Sweet" required />
+
+                        <label for="aroma">Aroma:</label>
+                        <input type="text" id="aroma" name="aroma" placeholder="E.g., Rich, Floral" required />
+
+                        <label for="agingTime">Aging Time (years):</label>
+                        <input type="number" id="agingTime" name="agingTime" min="0" required />
+
+                        <label for="suggestedFoodPairings">Suggested Food Pairings:</label>
+                        <input
+                            type="text"
+                            id="suggestedFoodPairings"
+                            name="suggestedFoodPairings"
+                            placeholder="E.g., Cheese, Red Meat"
+                            required
+                        />
+
+                        <button type="submit">Submit</button>
+                        <button type="button" onclick="cancelRating()">Cancel</button>
+                    </form>
+                </div>
+            `;
+
+            // Add form submission logic
+            const ratingForm = document.getElementById('ratingForm');
+            ratingForm.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                // Extract form values
+                const ratingStars = document.getElementById('ratingStars').value;
+                const flavour = document.getElementById('flavour').value;
+                const aroma = document.getElementById('aroma').value;
+                const agingTime = document.getElementById('agingTime').value;
+                const suggestedFoodPairings = document.getElementById('suggestedFoodPairings').value;
+
+                // Send the rating to the server
+                const response = await fetch('/submitWineRating', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        wineId: id,
+                        ratingStars: parseInt(ratingStars),
+                        flavour: flavour,
+                        aroma: aroma,
+                        agingTime: parseInt(agingTime),
+                        suggestedFoodPairings: suggestedFoodPairings,
+                    }),
+                });
+
+                if (response.ok) {
+                    console.log('Rating submitted successfully!');
+                    cancelRating(); // Close the modal
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    console.error('Error submitting rating');
+                }
+            });
+        }
+
+        // Show the modal
+        overlay.classList.add("active");
+        ratingPopUp.classList.add("active");
+    } else {
+        console.error('Error fetching rating data');
+    }
+}
+
+
+function cancelRating() {
+    const overlay = document.getElementById("ratingOverlay");
+    const ratingPopUp = document.getElementById("ratingPopUp");
+
+    // Hide the modal
+    overlay.classList.remove("active");
+    ratingPopUp.classList.remove("active");
+}
+
+// Close the popup when clicking outside of it
+document.getElementById("ratingOverlay").addEventListener("click", function (event) {
+    if (!event.target.closest("#ratingPopUp")) {
+        cancelRating();
+    }
+});
+
+
 function deleteWine(id) {
     // Get the overlay and delete confirmation modal elements
     const overlay = document.getElementById("deleteDecisionOverlay");
