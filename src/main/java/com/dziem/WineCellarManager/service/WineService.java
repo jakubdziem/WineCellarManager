@@ -11,8 +11,4 @@ public interface WineService {
     boolean updateClickedWineById(WineDTO wineDTO);
 
     boolean deleteClickedWineById(Long id);
-
-    Optional<RatingGetDTO> getWineRatingDTOByWineId(Long wineId);
-
-    boolean createWineRating(RatingPostDTO ratingPostDTO);
 }

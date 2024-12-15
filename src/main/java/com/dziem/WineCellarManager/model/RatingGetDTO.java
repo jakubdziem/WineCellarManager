@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RatingGetDTO {
+    private Long id;
     private boolean hasRating;
     private Integer ratingStars;
     private Flavour flavour;

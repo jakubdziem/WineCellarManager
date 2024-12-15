@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Year;
+import java.util.Optional;
 
 @Data
 @Entity
@@ -25,7 +26,7 @@ public class Wine {
     private String winery;
     private String name;
     private String imageUrl;
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "rating_id", referencedColumnName = "id")
     private Rating rating;
 }
