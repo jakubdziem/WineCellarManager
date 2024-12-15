@@ -1,9 +1,7 @@
 package com.dziem.WineCellarManager.controller;
 
-import com.dziem.WineCellarManager.model.Customer;
-import com.dziem.WineCellarManager.model.CustomerProfile;
-import com.dziem.WineCellarManager.model.Wine;
-import com.dziem.WineCellarManager.model.WineType;
+import com.dziem.WineCellarManager.mapper.WineMapper;
+import com.dziem.WineCellarManager.model.*;
 import com.dziem.WineCellarManager.repository.CustomerRepository;
 import com.dziem.WineCellarManager.repository.WineRepository;
 import com.dziem.WineCellarManager.service.WineService;
@@ -23,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CollarController {
     private final WineRepository wineRepository;
+    private final WineMapper wineMapper;
     private final CustomerRepository customerRepository;
     private final WineService wineService;
     @GetMapping("/collar")
@@ -94,17 +93,17 @@ public class CollarController {
                 .build();
     }
     @ModelAttribute("wines")
-    public Map<WineType, List<Wine>> groupWinesByType() {
+    public Map<WineType, List<WineDTO>> groupWinesByType() {
 //        return wineRepository.findAll().stream().filter(w -> w.getId() >= 741 && w.getId() <= 750).sorted(Comparator.comparing(Wine::getId)).collect(Collectors.groupingBy(Wine::getWineType));
-        return customerRepository.findById(1L).get().getWines().stream().sorted(Comparator.comparing(Wine::getId)).collect(Collectors.groupingBy(Wine::getWineType));
+        return customerRepository.findById(1L).get().getWines().stream().sorted(Comparator.comparing(Wine::getId)).map(wineMapper::wineToWineDTO).collect(Collectors.groupingBy(WineDTO::getWineType));
     }
     @GetMapping("/viewWine")
     @ResponseBody
-    public Wine getClickedWineById(@RequestParam("id") Long id) {
+    public WineDTO getClickedWineById(@RequestParam("id") Long id) {
         return wineService.getClickedWineById(id);
     }
     @PutMapping(value = "/updateWine", consumes = "application/json")
-    public ResponseEntity<Void> editClickedWineById(@RequestBody Wine wine) {
+    public ResponseEntity<Void> editClickedWineById(@RequestBody WineDTO wine) {
         if(wineService.editClickedWineById(wine)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

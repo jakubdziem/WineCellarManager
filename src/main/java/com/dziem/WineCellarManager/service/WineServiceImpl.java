@@ -1,6 +1,8 @@
 package com.dziem.WineCellarManager.service;
 
+import com.dziem.WineCellarManager.mapper.WineMapper;
 import com.dziem.WineCellarManager.model.Wine;
+import com.dziem.WineCellarManager.model.WineDTO;
 import com.dziem.WineCellarManager.repository.CustomerRepository;
 import com.dziem.WineCellarManager.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +14,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RequiredArgsConstructor
 public class WineServiceImpl implements WineService{
     private final WineRepository wineRepository;
+    private final WineMapper wineMapper;
     private final CustomerRepository customerRepository;
     @Override
-    public Wine getClickedWineById(Long id) {
-        return wineRepository.findById(id).orElse(new Wine());
+    public WineDTO getClickedWineById(Long id) {
+        return wineMapper.wineToWineDTO(
+                wineRepository.findById(id).orElse(new Wine()));
     }
 
     @Override
-    public boolean editClickedWineById(Wine wine) {
+    public boolean editClickedWineById(WineDTO wine) {
         AtomicBoolean result = new AtomicBoolean(false);
         wineRepository.findById(wine.getId()).ifPresentOrElse(
                 existing -> {

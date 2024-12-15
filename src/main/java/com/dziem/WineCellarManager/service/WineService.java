@@ -1,10 +1,10 @@
 package com.dziem.WineCellarManager.service;
 
-import com.dziem.WineCellarManager.model.Wine;
+import com.dziem.WineCellarManager.model.WineDTO;
 
 public interface WineService {
-    Wine getClickedWineById(Long id);
-    boolean editClickedWineById(Wine wine);
+    WineDTO getClickedWineById(Long id);
+    boolean editClickedWineById(WineDTO wineDTO);
 
     boolean deleteClickedWineById(Long id);
 }
