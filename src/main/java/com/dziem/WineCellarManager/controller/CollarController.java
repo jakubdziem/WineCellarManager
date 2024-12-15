@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -118,4 +119,13 @@ public class CollarController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/getWineRating")
+    @ResponseBody
+    public ResponseEntity<RatingDTO> getWineRatingDTOByWineId(@RequestParam Long wineId) {
+        Optional<RatingDTO> optionalRatingDTO = wineService.getWineRatingDTOByWineId(wineId);
+
+        return optionalRatingDTO.map(ratingDTO -> new ResponseEntity<>(ratingDTO, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 }
