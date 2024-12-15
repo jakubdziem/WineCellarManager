@@ -1,11 +1,9 @@
 package com.dziem.WineCellarManager.service;
 
 import com.dziem.WineCellarManager.mapper.WineMapper;
-import com.dziem.WineCellarManager.model.Rating;
-import com.dziem.WineCellarManager.model.RatingDTO;
-import com.dziem.WineCellarManager.model.Wine;
-import com.dziem.WineCellarManager.model.WineDTO;
+import com.dziem.WineCellarManager.model.*;
 import com.dziem.WineCellarManager.repository.CustomerRepository;
+import com.dziem.WineCellarManager.repository.RatingRepository;
 import com.dziem.WineCellarManager.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +18,7 @@ public class WineServiceImpl implements WineService{
     private final WineRepository wineRepository;
     private final WineMapper wineMapper;
     private final CustomerRepository customerRepository;
+    private final RatingRepository ratingRepository;
     @Override
     public WineDTO getClickedWineById(Long id) {
         return wineMapper.wineToWineDTO(
@@ -27,7 +26,7 @@ public class WineServiceImpl implements WineService{
     }
 
     @Override
-    public boolean editClickedWineById(WineDTO wine) {
+    public boolean updateClickedWineById(WineDTO wine) {
         AtomicBoolean result = new AtomicBoolean(false);
         wineRepository.findById(wine.getId()).ifPresentOrElse(
                 existing -> {
@@ -60,15 +59,15 @@ public class WineServiceImpl implements WineService{
     }
 
     @Override
-    public Optional<RatingDTO> getWineRatingDTOByWineId(Long wineId) {
-        AtomicReference<Optional<RatingDTO>> result = new AtomicReference<>(Optional.empty());
+    public Optional<RatingGetDTO> getWineRatingDTOByWineId(Long wineId) {
+        AtomicReference<Optional<RatingGetDTO>> result = new AtomicReference<>(Optional.empty());
         wineRepository.findById(wineId).ifPresentOrElse(
                 (existing) -> {
                     Optional<Rating> optionalRating = Optional.ofNullable(existing.getRating());
-                    RatingDTO ratingDTO = new RatingDTO();
+                    RatingGetDTO ratingGetDTO = new RatingGetDTO();
                     if(optionalRating.isPresent()) {
                         Rating rating = optionalRating.get();
-                        ratingDTO = RatingDTO.builder()
+                        ratingGetDTO = RatingGetDTO.builder()
                                 .hasRating(true)
                                 .ratingStars(rating.getRatingStars())
                                 .flavour(rating.getFlavour())
@@ -77,12 +76,35 @@ public class WineServiceImpl implements WineService{
                                 .suggestedFoodPairings(rating.getSuggestedFoodPairings())
                                 .build();
                     } else {
-                        ratingDTO.setHasRating(false);
+                        ratingGetDTO.setHasRating(false);
                     }
-                    result.set(Optional.of(ratingDTO));
+                    result.set(Optional.of(ratingGetDTO));
                 },
                 () -> result.set(Optional.empty())
         );
+        return result.get();
+    }
+
+    @Override
+    public boolean createWineRating(RatingPostDTO ratingPostDTO) {
+        AtomicBoolean result = new AtomicBoolean(false);
+        wineRepository.findById(ratingPostDTO.getWineId()).ifPresentOrElse(
+                (existing) -> {
+                    Rating rating = Rating
+                            .builder()
+                            .customer(existing.getCustomer())
+                            .ratingStars(ratingPostDTO.getRatingStars())
+                            .flavour(ratingPostDTO.getFlavour())
+                            .aroma(ratingPostDTO.getAroma())
+                            .agingTime(ratingPostDTO.getAgingTime())
+                            .suggestedFoodPairings(ratingPostDTO.getSuggestedFoodPairings())
+                            .wine(existing)
+                            .build();
+                    ratingRepository.save(rating);
+                    existing.setRating(rating);
+                    wineRepository.save(existing);
+                    result.set(true);
+                }, () -> result.set(false));
         return result.get();
     }
 }

@@ -104,8 +104,8 @@ public class CollarController {
         return wineService.getClickedWineById(id);
     }
     @PutMapping(value = "/updateWine", consumes = "application/json")
-    public ResponseEntity<Void> editClickedWineById(@RequestBody WineDTO wine) {
-        if(wineService.editClickedWineById(wine)) {
+    public ResponseEntity<Void> updateClickedWineById(@RequestBody WineDTO wine) {
+        if(wineService.updateClickedWineById(wine)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -121,11 +121,19 @@ public class CollarController {
     }
     @GetMapping("/getWineRating")
     @ResponseBody
-    public ResponseEntity<RatingDTO> getWineRatingDTOByWineId(@RequestParam Long wineId) {
-        Optional<RatingDTO> optionalRatingDTO = wineService.getWineRatingDTOByWineId(wineId);
+    public ResponseEntity<RatingGetDTO> getWineRatingDTOByWineId(@RequestParam Long wineId) {
+        Optional<RatingGetDTO> optionalRatingDTO = wineService.getWineRatingDTOByWineId(wineId);
 
-        return optionalRatingDTO.map(ratingDTO -> new ResponseEntity<>(ratingDTO, HttpStatus.OK))
+        return optionalRatingDTO.map(ratingGetDTO -> new ResponseEntity<>(ratingGetDTO, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
+    @PostMapping("/submitWineRating")
+    @ResponseBody
+    public ResponseEntity<Void> createWineRating(@RequestBody RatingPostDTO ratingPostDTO) {
+        if(wineService.createWineRating(ratingPostDTO)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

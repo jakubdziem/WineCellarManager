@@ -1,15 +1,18 @@
 package com.dziem.WineCellarManager.service;
 
-import com.dziem.WineCellarManager.model.RatingDTO;
+import com.dziem.WineCellarManager.model.RatingGetDTO;
+import com.dziem.WineCellarManager.model.RatingPostDTO;
 import com.dziem.WineCellarManager.model.WineDTO;
 
 import java.util.Optional;
 
 public interface WineService {
     WineDTO getClickedWineById(Long id);
-    boolean editClickedWineById(WineDTO wineDTO);
+    boolean updateClickedWineById(WineDTO wineDTO);
 
     boolean deleteClickedWineById(Long id);
 
-    Optional<RatingDTO> getWineRatingDTOByWineId(Long wineId);
+    Optional<RatingGetDTO> getWineRatingDTOByWineId(Long wineId);
+
+    boolean createWineRating(RatingPostDTO ratingPostDTO);
 }
