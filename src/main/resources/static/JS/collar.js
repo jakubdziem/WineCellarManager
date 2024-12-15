@@ -213,11 +213,14 @@ async function displayRatingPopup(id) {
                 <div>
                     <h3>Rating Details</h3>
                     <p><strong>Stars:</strong> ${ratingData.ratingStars}</p>
-                    <p><strong>Flavour:</strong> ${ratingData.flavour}</p>
+                    <p><strong>Flavour:</strong> <p><strong>Flavour:</strong> ${ratingData.flavour}</p></p>
                     <p><strong>Aroma:</strong> ${ratingData.aroma}</p>
                     <p><strong>Aging Time:</strong> ${ratingData.agingTime} years</p>
                     <p><strong>Suggested Food Pairings:</strong> ${ratingData.suggestedFoodPairings}</p>
-                    <button onclick="cancelRating()">Close</button>
+                    <button class = "cancel-button-rating" onclick="cancelRating()">Close</button>
+                    <button type="button" class="delete-button" onclick="deleteRating(${ratingData.id})">
+                    🗑️
+                    </button>
                 </div>
             `;
         } else {
@@ -226,29 +229,50 @@ async function displayRatingPopup(id) {
                 <div>
                     <h3>Submit Your Rating</h3>
                     <form id="ratingForm">
-                        <label for="ratingStars">Stars (1-5):</label>
-                        <input type="number" id="ratingStars" name="ratingStars" min="1" max="5" required />
-
-                        <label for="flavour">Flavour:</label>
-                        <input type="text" id="flavour" name="flavour" placeholder="E.g., Fruity, Sweet" required />
-
-                        <label for="aroma">Aroma:</label>
-                        <input type="text" id="aroma" name="aroma" placeholder="E.g., Rich, Floral" required />
-
-                        <label for="agingTime">Aging Time (years):</label>
-                        <input type="number" id="agingTime" name="agingTime" min="0" required />
-
-                        <label for="suggestedFoodPairings">Suggested Food Pairings:</label>
-                        <input
-                            type="text"
-                            id="suggestedFoodPairings"
-                            name="suggestedFoodPairings"
-                            placeholder="E.g., Cheese, Red Meat"
-                            required
-                        />
-
-                        <button type="submit">Submit</button>
-                        <button type="button" onclick="cancelRating()">Cancel</button>
+                        <div class="form-group">
+                            <label for="ratingStars">Stars (1-5):</label>
+                            <input type="number" id="ratingStars" name="ratingStars" min="1" max="5" required />
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="flavour">Flavour:</label>
+                            <select id="flavour" name="flavour">
+                                <option value="FRUITY" selected >Rich in fruit flavors</option>
+                                <option value="OAKY">Aged in oak barrels</option>
+                                <option value="SPICY">Hints of spices</option>
+                                <option value="EARTHY">Rich in earthy notes</option>
+                                <option value="FLORAL">Floral aroma</option>
+                                <option value="CITRUS">Citrus notes</option>
+                                <option value="MINERAL">Mineral-rich</option>
+                                <option value="NUTTY">Nutty aroma</option>
+                            </select>
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="aroma">Aroma:</label>
+                            <input type="text" id="aroma" name="aroma" placeholder="E.g., Rich, Floral" required />
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="agingTime">Aging Time (years):</label>
+                            <input type="number" id="agingTime" name="agingTime" min="0" required />
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="suggestedFoodPairings">Suggested Food Pairings:</label>
+                            <input
+                                type="text"
+                                id="suggestedFoodPairings"
+                                name="suggestedFoodPairings"
+                                placeholder="E.g., Cheese, Red Meat"
+                                required
+                            />
+                        </div>
+            
+                        <div class="form-group">
+                            <button type="submit">Submit</button>
+                            <button type="button" onclick="cancelRating()">Cancel</button>
+                        </div>
                     </form>
                 </div>
             `;
@@ -299,7 +323,22 @@ async function displayRatingPopup(id) {
     }
 }
 
+async function deleteRating(id) {
+    const response = await fetch('/deleteRating?id=' + id, {
+        method: 'DELETE'
+    });
 
+    if (response.ok) {
+        // Successfully deleted the wine, close the modal
+        console.log("Rating deleted successfully");
+        cancelRating();
+
+        // Optionally, refresh the page or remove the deleted wine from the DOM
+        location.reload();
+    } else {
+        console.error("Error deleting rating");
+    }
+}
 function cancelRating() {
     const overlay = document.getElementById("ratingOverlay");
     const ratingPopUp = document.getElementById("ratingPopUp");
