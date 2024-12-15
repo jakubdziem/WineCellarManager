@@ -133,6 +133,9 @@
                         <button th:if="${wine.rating == null}" type="button" class="btn btn-sm btn-outline-warning" th:attr="onclick='displayRatingPopup(' + ${wine.id} + ')'">
                             Rate
                         </button>
+                        <button th:if="${wine.rating != null}" type="button" class="btn btn-sm btn-outline-primary" th:attr="onclick='displayRatingPopup(' + ${wine.id} + ')'">
+                          Rating
+                        </button>
                       </div>
                       <small class="text-muted" th:text="${wine.price}">$105.63</small>
                     </div>
