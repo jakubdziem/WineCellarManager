@@ -1,6 +1,6 @@
 
 .card {
-    height: 400px; /* Increase the height */
+    height: auto;
 }
 .card img,
 .card svg {
@@ -308,3 +308,52 @@
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Blue focus outline */
     border-color: #007bff; /* Blue border on focus */
 }
+#ratingOverlay .viewButtonReact {
+    padding: 20px;
+    gap: 10px;
+    justify-content: center; /* Center the rating stars */
+}
+
+#ratingOverlay .stars {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between the stars */
+    font-size: 2rem; /* Larger stars */
+    cursor: pointer;
+}
+
+#ratingOverlay .stars .star {
+    color: #ccc; /* Default star color */
+    transition: color 0.3s ease;
+}
+
+#ratingOverlay .stars .star:hover,
+#ratingOverlay .stars .star:hover ~ .star {
+    color: gold; /* Highlight stars on hover */
+}
+
+#ratingOverlay .viewButtonReact button {
+    margin-top: 20px; /* Add some space between stars and button */
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #007bff; /* Blue button */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#ratingOverlay .viewButtonReact button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+.checked { /*rating stars*/
+    color: gold;
+}
+.stars span{
+    margin: 0;
+    padding: 0;
+    display: inline-block; /* Ensures the span elements are displayed on the same line */
+}
+
+
