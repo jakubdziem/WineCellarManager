@@ -4,6 +4,7 @@ import com.dziem.WineCellarManager.mapper.WineMapper;
 import com.dziem.WineCellarManager.model.*;
 import com.dziem.WineCellarManager.repository.CustomerRepository;
 import com.dziem.WineCellarManager.repository.WineRepository;
+import com.dziem.WineCellarManager.service.RatingService;
 import com.dziem.WineCellarManager.service.WineService;
 import com.dziem.WineCellarManager.utilities.PriceSumming;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class CollarController {
     private final WineMapper wineMapper;
     private final CustomerRepository customerRepository;
     private final WineService wineService;
+    private final RatingService ratingService;
     @GetMapping("/collar")
     public String getCollarPage() {
         return "collar";
@@ -122,7 +124,7 @@ public class CollarController {
     @GetMapping("/getWineRating")
     @ResponseBody
     public ResponseEntity<RatingGetDTO> getWineRatingDTOByWineId(@RequestParam Long wineId) {
-        Optional<RatingGetDTO> optionalRatingDTO = wineService.getWineRatingDTOByWineId(wineId);
+        Optional<RatingGetDTO> optionalRatingDTO = ratingService.getWineRatingDTOByWineId(wineId);
 
         return optionalRatingDTO.map(ratingGetDTO -> new ResponseEntity<>(ratingGetDTO, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -130,7 +132,15 @@ public class CollarController {
     @PostMapping("/submitWineRating")
     @ResponseBody
     public ResponseEntity<Void> createWineRating(@RequestBody RatingPostDTO ratingPostDTO) {
-        if(wineService.createWineRating(ratingPostDTO)) {
+        if(ratingService.createWineRating(ratingPostDTO)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @DeleteMapping("/deleteRating")
+    public ResponseEntity<Void> deleteClickedRatingById(@RequestParam Long id) {
+        if (ratingService.deleteClickedRatingById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

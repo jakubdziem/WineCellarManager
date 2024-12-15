@@ -3,14 +3,11 @@ package com.dziem.WineCellarManager.service;
 import com.dziem.WineCellarManager.mapper.WineMapper;
 import com.dziem.WineCellarManager.model.*;
 import com.dziem.WineCellarManager.repository.CustomerRepository;
-import com.dziem.WineCellarManager.repository.RatingRepository;
 import com.dziem.WineCellarManager.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor

@@ -8,8 +8,6 @@ import com.dziem.WineCellarManager.repository.RatingRepository;
 import com.dziem.WineCellarManager.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
