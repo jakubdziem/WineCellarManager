@@ -1,6 +1,7 @@
 package com.dziem.WineCellarManager.service;
 
 import com.dziem.WineCellarManager.model.WineDTO;
+import com.dziem.WineCellarManager.model.WinePostDTO;
 
 
 public interface WineService {
@@ -8,4 +9,6 @@ public interface WineService {
     boolean updateClickedWineById(WineDTO wineDTO);
 
     boolean deleteClickedWineById(Long id);
+
+    boolean createWine(WinePostDTO winePostDTO, Long userId);
 }

@@ -98,11 +98,13 @@
     opacity: 1; /* Fully visible */
 }
 
+#addOverlay .viewButtonReact,
 #editOverlay .viewButtonReact {
     padding: 20px;
     gap: 10px;
 }
 
+#addOverlay  input,
 #editOverlay input {
     width: 100%;
     padding: 8px;
@@ -111,17 +113,20 @@
     border-radius: 4px;
 }
 
+#addOverlay form,
 #editOverlay form {
     display: flex;
     flex-wrap: wrap; /* Allows wrapping to the next row */
     gap: 20px; /* Adds spacing between inputs */
 }
 
+#addOverlay form .mb-3,
 #editOverlay form .mb-3 {
     flex: 1 1 calc(50% - 20px); /* Each input takes 50% of the width minus gap */
     min-width: 200px; /* Ensure a minimum width for smaller screens */
 }
 
+#addOverlay  .buttons,
 #editOverlay .buttons {
     display: flex; /* Use flexbox to align buttons */
     justify-content: center; /* Center the buttons in the container */
@@ -129,6 +134,7 @@
     margin-top: 20px; /* Add some space above the button row */
 }
 
+#addOverlay .buttons button,
 #editOverlay .buttons button {
     padding: 10px 30px; /* Uniform button size */
     font-size: 1rem;
@@ -141,17 +147,21 @@
     width: 120px; /* Fixed button width for consistent size */
 }
 
+#addOverlay .buttons button:nth-child(2),
 #editOverlay .buttons button:nth-child(2) { /* Cancel button styling */
     background-color: #dc3545; /* Red color for Cancel button */
 }
 
+#addOverlay .buttons button:nth-child(2):hover,
 #editOverlay .buttons button:nth-child(2):hover {
     background-color: #a71d2a; /* Darker red on hover */
 }
 
+#addOverlay .buttons button:nth-child(1):hover,
 #editOverlay .buttons button:nth-child(1):hover {
     background-color: #125ca8; /* Darker blue on hover */
 }
+#add,
 #edit {
     height: 700px;
 }

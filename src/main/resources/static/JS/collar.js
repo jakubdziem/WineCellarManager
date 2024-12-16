@@ -403,5 +403,115 @@ async function confirmDelete(id) {
         console.error("Error deleting wine");
     }
 }
+async function displayAddWineForm(id) {
+    // Get the overlay and add modal elements
+    const overlay = document.getElementById("addOverlay");
+    const addPopUp = document.getElementById("add");
+
+    // Populate the modal with a form for adding a new wine
+    addPopUp.innerHTML = `
+        <h5>Add Wine</h5>
+        <form id="addWineForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter wine name" required>
+            </div>
+            <div class="mb-3">
+                <label for="vintage" class="form-label">Vintage</label>
+                <input type="text" id="vintage" name="vintage" class="form-control" placeholder="Enter vintage year" required>
+            </div>
+            <div class="mb-3">
+                <label for="imageUrl" class="form-label">Image URL</label>
+                <input type="text" id="imageUrl" name="imageUrl" class="form-control" placeholder="Enter image URL" required>
+            </div>
+            <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" id="country" name="country" class="form-control" placeholder="Enter country" required>
+            </div>
+            <div class="mb-3">
+                <label for="region" class="form-label">Region</label>
+                <input type="text" id="region" name="region" class="form-control" placeholder="Enter region" required>
+            </div>
+            <div class="mb-3">
+                <label for="winery" class="form-label">Winery</label>
+                <input type="text" id="winery" name="winery" class="form-control" placeholder="Enter winery name" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="text" id="price" name="price" class="form-control" placeholder="Enter price" required>
+            </div>
+            <div class="mb-3">
+                <label for="wineType" class="form-label">Wine Type</label>
+                <select id="wineType" name="wineType" class="form-control" required>
+                    <option value="" disabled selected>Select a wine type</option>
+                    <option value="RED">RED</option>
+                    <option value="WHITE">WHITE</option>
+                    <option value="SPARKLING">SPARKLING</option>
+                    <option value="ROSE">ROSE</option>
+                    <option value="DESSERT">DESSERT</option>
+                    <option value="PORT">PORT</option>
+                </select>
+            </div>
+            <div class="buttons">
+                <button type="submit">Add Wine</button>
+                <button type="button" onclick="cancelAdd()">Cancel</button>
+            </div>
+        </form>
+    `;
+
+    // Show the modal
+    overlay.classList.add("active");
+    addPopUp.classList.add("active");
+
+    // Add form submission logic
+    const addWineForm = document.getElementById("addWineForm");
+    addWineForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        // Extract form values
+        const newWine = {
+            userId: id,
+            name: document.getElementById('name').value,
+            vintage: document.getElementById('vintage').value,
+            imageUrl: document.getElementById('imageUrl').value,
+            country: document.getElementById('country').value,
+            region: document.getElementById('region').value,
+            winery: document.getElementById('winery').value,
+            price: document.getElementById('price').value,
+            wineType: document.getElementById('wineType').value,
+        };
+
+        // Send the data to the server
+        const response = await fetch('/addWine', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newWine)
+        });
+
+        if (response.ok) {
+            console.log("Wine added successfully!");
+            cancelAdd(); // Close the modal
+            location.reload(); // Refresh the page to reflect changes
+        } else {
+            console.error("Error adding wine");
+        }
+    });
+}
+
+function cancelAdd() {
+    const overlay = document.getElementById("addOverlay");
+    const addPopUp = document.getElementById("add");
+    overlay.classList.remove("active");
+    addPopUp.classList.remove("active");
+}
+
+// Close popup when clicking outside of it
+document.getElementById("addOverlay").addEventListener("click", function (event) {
+    if (!event.target.closest("#add")) {
+        cancelAdd();
+    }
+});
 
 

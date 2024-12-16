@@ -64,9 +64,18 @@
         <p class="lead text-muted" th:text="'Favorite winery:' + ${customer.favoriteWinery}"></p>
         <p class="lead text-muted" th:text="'Favorite wine type:' + ${customer.favoriteWineType}"></p>
         <p class="lead text-muted" th:text="'Collar Price:' + ${customer.priceOfCollar}"></p>
+        <button type="button" class="btn btn-sm btn-primary" th:attr="onclick='displayAddWineForm(' + ${customer.id} + ')'">
+          Add wine
+        </button>
       </div>
     </div>
   </section>
+
+  <div class="overlay" id="addOverlay">
+    <div class="viewButtonReact" id="add">
+    </div>
+  </div>
+
 
   <div class="overlay" id="overlay">
     <div class="viewButtonReact" id="view">
@@ -147,7 +156,6 @@
         </div>
       </div>
     </div>
-  </div>
 </main>
 <script src="/JS/collar.js">
 </script>
