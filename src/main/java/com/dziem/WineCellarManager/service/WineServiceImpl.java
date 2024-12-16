@@ -53,4 +53,27 @@ public class WineServiceImpl implements WineService{
                 }, () -> result.set(false));
         return result.get();
     }
+
+    @Override
+    public boolean createWine(WinePostDTO winePostDTO, Long userId) {
+        AtomicBoolean result = new AtomicBoolean(false);
+        customerRepository.findById(userId).ifPresentOrElse(
+                (existing) -> {
+                    Wine wine = Wine.builder()
+                            .customer(existing)
+                            .name(winePostDTO.getName())
+                            .vintage(winePostDTO.getVintage())
+                            .imageUrl(winePostDTO.getImageUrl())
+                            .country(winePostDTO.getCountry())
+                            .region(winePostDTO.getRegion())
+                            .winery(winePostDTO.getWinery())
+                            .price(winePostDTO.getPrice())
+                            .wineType(winePostDTO.getWineType())
+                            .build();
+                    existing.getWines().add(wine);
+                    customerRepository.save(existing);
+                    result.set(true);
+                }, () -> result.set(false));
+        return result.get();
+    }
 }
