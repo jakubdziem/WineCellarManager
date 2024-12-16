@@ -443,8 +443,7 @@ async function displayAddWineForm(id) {
             <div class="mb-3">
                 <label for="wineType" class="form-label">Wine Type</label>
                 <select id="wineType" name="wineType" class="form-control" required>
-                    <option value="" disabled selected>Select a wine type</option>
-                    <option value="RED">RED</option>
+                    <option value="RED" selected>RED</option>
                     <option value="WHITE">WHITE</option>
                     <option value="SPARKLING">SPARKLING</option>
                     <option value="ROSE">ROSE</option>
@@ -492,6 +491,7 @@ async function displayAddWineForm(id) {
 
         if (response.ok) {
             console.log("Wine added successfully!");
+
             cancelAdd(); // Close the modal
             location.reload(); // Refresh the page to reflect changes
         } else {
@@ -508,10 +508,10 @@ function cancelAdd() {
 }
 
 // Close popup when clicking outside of it
-document.getElementById("addOverlay").addEventListener("click", function (event) {
-    if (!event.target.closest("#add")) {
-        cancelAdd();
-    }
-});
+// document.getElementById("addOverlay").addEventListener("click", function (event) {
+//     if (!event.target.closest("#add")) {
+//         cancelAdd();
+//     }
+// });
 
 

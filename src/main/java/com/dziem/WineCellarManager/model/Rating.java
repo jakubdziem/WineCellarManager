@@ -2,10 +2,7 @@ package com.dziem.WineCellarManager.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Entity
@@ -19,6 +16,7 @@ public class Rating {
     @ManyToOne()
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     @JsonIgnore
+    @ToString.Exclude // Exclude the customer field from toString
     private Customer customer;
     private Integer ratingStars;
     private Flavour flavour;
@@ -27,5 +25,6 @@ public class Rating {
     private String suggestedFoodPairings;
     @OneToOne(mappedBy = "rating")
     @JsonIgnore
+    @ToString.Exclude // Exclude the customer field from toString
     private Wine wine;
 }
