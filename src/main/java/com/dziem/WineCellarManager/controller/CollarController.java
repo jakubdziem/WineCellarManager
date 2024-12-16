@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -76,6 +73,7 @@ public class CollarController {
             }
         }
         return CustomerProfile.builder()
+                .id(customer.getId())
                 .nickname(customer.getNickname())
                 .numberOfWines(wines.size())
                 .numberOfRatings(customer.getRatings().size())
@@ -98,7 +96,14 @@ public class CollarController {
     @ModelAttribute("wines")
     public Map<WineType, List<WineDTO>> groupWinesByType() {
 //        return wineRepository.findAll().stream().filter(w -> w.getId() >= 741 && w.getId() <= 750).sorted(Comparator.comparing(Wine::getId)).collect(Collectors.groupingBy(Wine::getWineType));
-        return customerRepository.findById(1L).get().getWines().stream().sorted(Comparator.comparing(Wine::getId)).map(wineMapper::wineToWineDTO).collect(Collectors.groupingBy(WineDTO::getWineType));
+
+        Optional<Customer> opt = customerRepository.findById(1L);
+        if(opt.isPresent()) {
+            Map<WineType, List<WineDTO>> collect = opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getId)).map(wineMapper::wineToWineDTO).collect(Collectors.groupingBy(WineDTO::getWineType));
+            return collect;
+        } else {
+            return new HashMap<WineType, List<WineDTO>>();
+        }
     }
     @GetMapping("/viewWine")
     @ResponseBody
@@ -141,6 +146,14 @@ public class CollarController {
     @DeleteMapping("/deleteRating")
     public ResponseEntity<Void> deleteClickedRatingById(@RequestParam Long id) {
         if (ratingService.deleteClickedRatingById(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PostMapping("/addWine")
+    public ResponseEntity<Void> createWine(@RequestBody WinePostDTO winePostDTO) {
+        if(wineService.createWine(winePostDTO, winePostDTO.getUserId())) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

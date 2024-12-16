@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class CustomerProfile {
+    private Long id;
     private String nickname;
     private Integer numberOfWines;
     private Integer numberOfRatings;
