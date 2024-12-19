@@ -26,4 +26,11 @@ public class Customer {
     @JsonIgnore
     @ToString.Exclude // Exclude the customer field from toString
     private List<Rating> ratings;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JsonIgnore
+    @ToString.Exclude // Exclude the customer field from toString
+    private List<Role> roles;
 }
