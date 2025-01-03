@@ -34,7 +34,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**").permitAll() // Permit all for auth endpoints
-                        .requestMatchers(HttpMethod.GET).authenticated() // Authenticate GET requests
+                        .requestMatchers(HttpMethod.GET).permitAll()
+                        .requestMatchers("/collar/edit").authenticated() // Authenticate GET requests
                         .anyRequest().authenticated() // Authenticate all other requests
                 )
                 .httpBasic(withDefaults()); // Use HTTP Basic authentication

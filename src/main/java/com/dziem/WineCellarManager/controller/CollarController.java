@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequiredArgsConstructor
 public class CollarController {
+    public static final UUID TESTER_ID = UUID.fromString("2f7959a4-547d-4b95-96bf-8896b87c8f79");
     private final WineRepository wineRepository;
     private final WineMapper wineMapper;
     private final CustomerRepository customerRepository;
@@ -30,7 +31,7 @@ public class CollarController {
     }
     @ModelAttribute("customer")
     public CustomerProfile getCustomer() {
-        Customer customer = customerRepository.findById(1L).get();
+        Customer customer = customerRepository.findById(TESTER_ID).get();
         List<Wine> wines = customer.getWines();
         Map<String, List<Wine>> winesByRegion = wines.stream().collect(Collectors.groupingBy(Wine::getRegion));
         String favoriteRegion = "";
@@ -85,7 +86,7 @@ public class CollarController {
                     } else {
                         return -1;
                     }
-                }).get())
+                }).orElse(new Wine()))
                 .favoriteRegion(favoriteRegion)
                 .favoriteCountry(favoriteCountry)
                 .favoriteWinery(favoriteWinery)
@@ -97,7 +98,7 @@ public class CollarController {
     public Map<WineType, List<WineDTO>> groupWinesByType() {
 //        return wineRepository.findAll().stream().filter(w -> w.getId() >= 741 && w.getId() <= 750).sorted(Comparator.comparing(Wine::getId)).collect(Collectors.groupingBy(Wine::getWineType));
 
-        Optional<Customer> opt = customerRepository.findById(1L);
+        Optional<Customer> opt = customerRepository.findById(TESTER_ID);
         if(opt.isPresent()) {
             Map<WineType, List<WineDTO>> collect = opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getId)).map(wineMapper::wineToWineDTO).collect(Collectors.groupingBy(WineDTO::getWineType));
             return collect;
@@ -153,7 +154,7 @@ public class CollarController {
     }
     @PostMapping("/addWine")
     public ResponseEntity<Void> createWine(@RequestBody WinePostDTO winePostDTO) {
-        if(wineService.createWine(winePostDTO, winePostDTO.getUserId())) {
+        if(wineService.createWine(winePostDTO, winePostDTO.getCustomerId())) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

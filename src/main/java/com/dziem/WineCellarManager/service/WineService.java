@@ -3,6 +3,8 @@ package com.dziem.WineCellarManager.service;
 import com.dziem.WineCellarManager.model.WineDTO;
 import com.dziem.WineCellarManager.model.WinePostDTO;
 
+import java.util.UUID;
+
 
 public interface WineService {
     WineDTO getClickedWineById(Long id);
@@ -10,5 +12,5 @@ public interface WineService {
 
     boolean deleteClickedWineById(Long id);
 
-    boolean createWine(WinePostDTO winePostDTO, Long userId);
+    boolean createWine(WinePostDTO winePostDTO, UUID customerId);
 }

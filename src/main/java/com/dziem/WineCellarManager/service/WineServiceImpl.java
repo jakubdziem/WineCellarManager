@@ -7,6 +7,7 @@ import com.dziem.WineCellarManager.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
@@ -55,9 +56,9 @@ public class WineServiceImpl implements WineService{
     }
 
     @Override
-    public boolean createWine(WinePostDTO winePostDTO, Long userId) {
+    public boolean createWine(WinePostDTO winePostDTO, UUID customerId) {
         AtomicBoolean result = new AtomicBoolean(false);
-        customerRepository.findById(userId).ifPresentOrElse(
+        customerRepository.findById(customerId).ifPresentOrElse(
                 (existing) -> {
                     Wine wine = Wine.builder()
                             .customer(existing)
