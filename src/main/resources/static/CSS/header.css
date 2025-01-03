@@ -33,3 +33,7 @@ header {
         margin: 0 auto;
     }
 }
+
+.navbar-nav .user-options {
+    cursor: pointer;
+}
