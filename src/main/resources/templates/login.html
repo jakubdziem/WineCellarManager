@@ -27,25 +27,31 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav ms-auto align-items-center">
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{home}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{search}">Collars</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{collar}">My collar</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{login}">Sign in</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{register}">Sign up</a>
-            </li>
-          </ul>
-        </div>
+        <ul class="navbar-nav ms-auto align-items-center" id="navbar">
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{home}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{search}">Collars</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{collar}">My collar</a>
+          </li>
+          <li class="nav-item guest-options">
+            <a class="nav-link" th:href="@{login}">Sign in</a>
+          </li>
+          <li class="nav-item guest-options">
+            <a class="nav-link" th:href="@{register}">Sign up</a>
+          </li>
+          <li class="nav-item dropdown user-options d-none">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span id="userName"></span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" id="logoutBtn" href="#">Log out</a></li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </nav>
   </header>
@@ -56,18 +62,12 @@
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
         <div class="form-floating">
-          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-          <label for="floatingInput">Email address</label>
+          <input type="text" class="form-control" id="nickname" placeholder="name">
+          <label for="nickname">Nickname</label>
         </div>
         <div class="form-floating">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingPassword">Password</label>
-        </div>
-
-        <div class="checkbox mb-3">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
+          <input type="password" class="form-control" id="password" placeholder="Password">
+          <label for="password">Password</label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
       </form>
@@ -76,4 +76,8 @@
   </div>
     
   </body>
+  <script src="/JS/login.js">
+  </script>
+  <script src="/JS/loggedInCheck.js">
+  </script>
 </html>
