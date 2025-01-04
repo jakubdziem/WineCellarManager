@@ -162,11 +162,12 @@ async function saveEdit(id) {
         price: form.price.value,
         wineType: form.wineType.value
     };
-
+    const token = localStorage.getItem('token');
     const response = await fetch('/updateWine', {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': token
         },
         body: JSON.stringify({ id, ...updatedWine })
     });
@@ -182,10 +183,12 @@ async function saveEdit(id) {
 
 async function rateWine(id, stars) {
     // Send POST request to save the rating
+    const token = localStorage.getItem('token');
     const response = await fetch('/rateWine', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': token
         },
         body: JSON.stringify({ wineId: id, ratingStars: stars })
     });
@@ -290,10 +293,12 @@ async function displayRatingPopup(id) {
                 const suggestedFoodPairings = document.getElementById('suggestedFoodPairings').value;
 
                 // Send the rating to the server
+                const token = localStorage.getItem('token');
                 const response = await fetch('/submitWineRating', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': token
                     },
                     body: JSON.stringify({
                         wineId: id,
@@ -324,7 +329,12 @@ async function displayRatingPopup(id) {
 }
 
 async function deleteRating(id) {
+    const token = localStorage.getItem('token');
     const response = await fetch('/deleteRating?id=' + id, {
+        headers:
+            {
+                'Authorization': token
+            },
         method: 'DELETE'
     });
 
@@ -387,8 +397,12 @@ function cancelDelete() {
 
 // Confirm Delete Action
 async function confirmDelete(id) {
+    const token = localStorage.getItem('token');
     // Send a delete request to the server
     const response = await fetch('/deleteWine?id=' + id, {
+        headers: {
+            'Authorization': token
+        },
         method: 'DELETE'
     });
 
@@ -482,8 +496,6 @@ async function displayAddWineForm(id) {
 
         // Send the data to the server
         const token = localStorage.getItem('token');
-        console.log(token)
-        console.log(JSON.stringify(newWine))
         const response = await fetch('/addWine', {
             method: 'POST',
             headers: {
