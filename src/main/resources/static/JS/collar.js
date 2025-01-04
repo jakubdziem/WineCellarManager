@@ -469,7 +469,7 @@ async function displayAddWineForm(id) {
 
         // Extract form values
         const newWine = {
-            userId: id,
+            customerId: id,
             name: document.getElementById('name').value,
             vintage: document.getElementById('vintage').value,
             imageUrl: document.getElementById('imageUrl').value,
@@ -481,10 +481,14 @@ async function displayAddWineForm(id) {
         };
 
         // Send the data to the server
+        const token = localStorage.getItem('token');
+        console.log(token)
+        console.log(JSON.stringify(newWine))
         const response = await fetch('/addWine', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify(newWine)
         });

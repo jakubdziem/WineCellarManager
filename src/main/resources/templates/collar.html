@@ -70,7 +70,7 @@
         <p class="lead text-muted" th:text="'Favorite winery:' + ${customer.favoriteWinery}"></p>
         <p class="lead text-muted" th:text="'Favorite wine type:' + ${customer.favoriteWineType}"></p>
         <p class="lead text-muted" th:text="'Collar Price:' + ${customer.priceOfCollar}"></p>
-        <button type="button" class="btn btn-sm btn-primary" th:attr="onclick='displayAddWineForm(' + ${customer.id} + ')'">
+        <button type="button" class="btn btn-sm btn-primary" th:attr="onclick='displayAddWineForm(' + '\'' + ${customer.id} + '\'' + ')'">
           Add wine
         </button>
       </div>
