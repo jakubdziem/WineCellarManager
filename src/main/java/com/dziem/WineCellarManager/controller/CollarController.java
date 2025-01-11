@@ -3,35 +3,56 @@ package com.dziem.WineCellarManager.controller;
 import com.dziem.WineCellarManager.mapper.WineMapper;
 import com.dziem.WineCellarManager.model.*;
 import com.dziem.WineCellarManager.repository.CustomerRepository;
-import com.dziem.WineCellarManager.repository.WineRepository;
 import com.dziem.WineCellarManager.service.RatingService;
 import com.dziem.WineCellarManager.service.WineService;
 import com.dziem.WineCellarManager.utilities.PriceSumming;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.dziem.WineCellarManager.security.SecurityConstants.AUTHORIZATION_COOKIE_NAME;
+import static com.dziem.WineCellarManager.security.SecurityConstants.JWT_SECRET;
+
 @Controller
 @RequiredArgsConstructor
 public class CollarController {
-    public static final UUID TESTER_ID = UUID.fromString("2f7959a4-547d-4b95-96bf-8896b87c8f79");
-    private final WineRepository wineRepository;
     private final WineMapper wineMapper;
     private final CustomerRepository customerRepository;
     private final WineService wineService;
     private final RatingService ratingService;
     @GetMapping("/collar")
-    public String getCollarPage() {
+    public String getCollarPage(Model model, HttpServletRequest request) {
+        Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals(AUTHORIZATION_COOKIE_NAME)).findFirst().ifPresentOrElse(
+                cookie -> {
+                    Claims claims = Jwts.parser()
+                            .setSigningKey(JWT_SECRET)
+                            .build()
+                            .parseClaimsJws(cookie.getValue())
+                            .getBody();
+                    String nickname = claims.getSubject();
+                    model.addAttribute("customer", getCustomer(nickname));
+                    model.addAttribute("wines", groupWinesByType(nickname));
+                    },
+                () -> {
+                    throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect.");
+                });
         return "collar";
     }
-    @ModelAttribute("customer")
-    public CustomerProfile getCustomer() {
-        Customer customer = customerRepository.findById(TESTER_ID).get();
+
+    private CustomerProfile getCustomer(String nickname) {
+
+
+        Customer customer = customerRepository.findByNickname(nickname).get();
         List<Wine> wines = customer.getWines();
         Map<String, List<Wine>> winesByRegion = wines.stream().collect(Collectors.groupingBy(Wine::getRegion));
         String favoriteRegion = "";
@@ -94,16 +115,14 @@ public class CollarController {
                 .priceOfCollar(wines.stream().map(Wine::getPrice).reduce(String.valueOf(0), PriceSumming::sumPrice))
                 .build();
     }
-    @ModelAttribute("wines")
-    public Map<WineType, List<WineDTO>> groupWinesByType() {
+    private Map<WineType, List<WineDTO>> groupWinesByType(String nickname) {
 //        return wineRepository.findAll().stream().filter(w -> w.getId() >= 741 && w.getId() <= 750).sorted(Comparator.comparing(Wine::getId)).collect(Collectors.groupingBy(Wine::getWineType));
 
-        Optional<Customer> opt = customerRepository.findById(TESTER_ID);
+        Optional<Customer> opt = customerRepository.findByNickname(nickname);
         if(opt.isPresent()) {
-            Map<WineType, List<WineDTO>> collect = opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getId)).map(wineMapper::wineToWineDTO).collect(Collectors.groupingBy(WineDTO::getWineType));
-            return collect;
+            return opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getId)).map(wineMapper::wineToWineDTO).collect(Collectors.groupingBy(WineDTO::getWineType));
         } else {
-            return new HashMap<WineType, List<WineDTO>>();
+            return new HashMap<>();
         }
     }
     @GetMapping("/viewWine")
