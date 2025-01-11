@@ -15,7 +15,20 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('logoutBtn').addEventListener('click', () => {
             localStorage.removeItem('token'); // Remove the token from storage
             localStorage.removeItem('nickname');
+            fetch('/api/auth/logout', {
+                    method: 'POST'
+                })
+            .then(response => {
+                if (response.ok) {
+                    console.log("Deleted cookie successfully")
+                } else {
+                    console.error('Failed to fetch the collar page');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+            
             alert('Logged out successfully.');
+            window.location.href = '/home';
             location.reload(); // Reload the page to update the navbar
         });
 

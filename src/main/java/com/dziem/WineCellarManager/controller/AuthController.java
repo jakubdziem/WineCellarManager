@@ -4,6 +4,9 @@ import com.dziem.WineCellarManager.model.*;
 import com.dziem.WineCellarManager.repository.CustomerRepository;
 import com.dziem.WineCellarManager.repository.RoleRepository;
 import com.dziem.WineCellarManager.security.JWTGenerator;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +15,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+
+import static com.dziem.WineCellarManager.security.SecurityConstants.AUTHORIZATION_COOKIE_NAME;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -47,12 +49,39 @@ public class AuthController {
         }
     }
     @PostMapping("login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getNickname(), loginDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
+        Cookie cookie = new Cookie(AUTHORIZATION_COOKIE_NAME, token);
+        setAuthorizationCookieAttributes(cookie);
+        cookie.setMaxAge(24 * 60 * 60); // 1 day (optional)
+
+        response.addCookie(cookie);
         return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+    }
+    @PostMapping("logout")
+    public void logout(HttpServletResponse response, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        boolean haveAuthCookie = false;
+        for(Cookie cookie : cookies) {
+            if(cookie.getName().equals(AUTHORIZATION_COOKIE_NAME)) {
+                haveAuthCookie = true;
+            }
+        }
+        if(haveAuthCookie) {
+            Cookie cookie = new Cookie(AUTHORIZATION_COOKIE_NAME, null);
+            setAuthorizationCookieAttributes(cookie);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+    }
+
+    private static void setAuthorizationCookieAttributes(Cookie cookie) {
+        cookie.setHttpOnly(true); // HttpOnly flag
+        cookie.setSecure(true); // Only send over HTTPS
+        cookie.setPath("/"); // Cookie is available to the entire app
     }
 }
