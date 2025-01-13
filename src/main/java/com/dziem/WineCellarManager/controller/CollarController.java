@@ -26,10 +26,22 @@ public class CollarController {
     private final WineService wineService;
     private final RatingService ratingService;
     private final CustomerService customerService;
+    @GetMapping("/otherCollars/{nickname}")
+    public String getCollarPagePublic(Model model, @PathVariable String nickname) {
+        model.addAttribute("public", true);
+        model.addAttribute("found", false);
+        if(customerService.customerExist(nickname)) {
+            model.addAttribute("found", true);
+            model.addAttribute("wines", wineService.groupWinesByType(nickname));
+            model.addAttribute("customer", customerService.getCustomer(nickname));
+        }
+        return "otherCollars";
+    }
     @GetMapping("/collar")
     public String getCollarPage(Model model, HttpServletRequest request, @RequestParam(required = false) String selectedSorting) {
         Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals(AUTHORIZATION_COOKIE_NAME)).findFirst().ifPresentOrElse(
                 cookie -> {
+                    model.addAttribute("public", false);
                     Claims claims = Jwts.parser()
                             .setSigningKey(JWT_SECRET)
                             .build()
@@ -51,6 +63,7 @@ public class CollarController {
                     }
                     },
                 () -> {
+                    model.addAttribute("public", false);
                     model.addAttribute("customer", customerService.getCustomer("tester"));
                     if (selectedSorting != null) {
                         model.addAttribute("selectedSorting", selectedSorting);

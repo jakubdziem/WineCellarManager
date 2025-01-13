@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,6 +82,12 @@ public class CustomerServiceImpl implements CustomerService {
                 .favoriteWineType(favoriteWineType)
                 .priceOfCollar(wines.stream().map(Wine::getPrice).reduce(String.valueOf(0), PriceSumming::sumPrice))
                 .build();
+    }
+
+    @Override
+    public boolean customerExist(String nickname) {
+        Optional<Customer> foundCustomer = customerRepository.findByNickname(nickname);
+        return foundCustomer.isPresent();
     }
 
 
