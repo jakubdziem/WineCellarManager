@@ -38,12 +38,13 @@ public class CollarController {
                     String nickname = claims.getSubject();
                     if(selectedSorting != null) {
                         model.addAttribute("selectedSorting", selectedSorting);
-                    } else {
+                    }
+                    else {
                         model.addAttribute("selectedSorting", "Wine type");
                     }
                     String mode = (String) model.getAttribute("selectedSorting");
                     model.addAttribute("customer", customerService.getCustomer(nickname));
-                    if(mode.equals(DEFAULT_SORTING_MODE)) {
+                    if(DEFAULT_SORTING_MODE.equals(mode)) {
                         model.addAttribute("wines", wineService.groupWinesByType(nickname));
                     } else {
                         model.addAttribute("wines", wineService.sortWinesByMode(nickname, mode));
@@ -56,8 +57,11 @@ public class CollarController {
                     if (selectedSorting != null) {
                         model.addAttribute("selectedSorting", selectedSorting);
                     }
+                    else {
+                        model.addAttribute("selectedSorting", "Wine type");
+                    }
                     String mode = (String) model.getAttribute("selectedSorting");
-                    if(mode.equals(DEFAULT_SORTING_MODE)) {
+                    if(DEFAULT_SORTING_MODE.equals(mode)) {
                         model.addAttribute("wines", wineService.groupWinesByType("tester"));
                     } else {
                         model.addAttribute("wines", wineService.sortWinesByMode("tester", mode));
