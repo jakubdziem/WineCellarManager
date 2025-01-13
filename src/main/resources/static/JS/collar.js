@@ -523,11 +523,5 @@ function cancelAdd() {
     addPopUp.classList.remove("active");
 }
 
-// Close popup when clicking outside of it
-// document.getElementById("addOverlay").addEventListener("click", function (event) {
-//     if (!event.target.closest("#add")) {
-//         cancelAdd();
-//     }
-// });
 
 
