@@ -1,24 +1,20 @@
 package com.dziem.WineCellarManager.controller;
 
-import com.dziem.WineCellarManager.mapper.WineMapper;
 import com.dziem.WineCellarManager.model.*;
-import com.dziem.WineCellarManager.repository.CustomerRepository;
+import com.dziem.WineCellarManager.service.CustomerService;
 import com.dziem.WineCellarManager.service.RatingService;
 import com.dziem.WineCellarManager.service.WineService;
-import com.dziem.WineCellarManager.utilities.PriceSumming;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.dziem.WineCellarManager.security.SecurityConstants.AUTHORIZATION_COOKIE_NAME;
 import static com.dziem.WineCellarManager.security.SecurityConstants.JWT_SECRET;
@@ -26,12 +22,12 @@ import static com.dziem.WineCellarManager.security.SecurityConstants.JWT_SECRET;
 @Controller
 @RequiredArgsConstructor
 public class CollarController {
-    private final WineMapper wineMapper;
-    private final CustomerRepository customerRepository;
+    public static final String DEFAULT_SORTING_MODE = "Wine type";
     private final WineService wineService;
     private final RatingService ratingService;
+    private final CustomerService customerService;
     @GetMapping("/collar")
-    public String getCollarPage(Model model, HttpServletRequest request) {
+    public String getCollarPage(Model model, HttpServletRequest request, @RequestParam(required = false) String selectedSorting) {
         Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals(AUTHORIZATION_COOKIE_NAME)).findFirst().ifPresentOrElse(
                 cookie -> {
                     Claims claims = Jwts.parser()
@@ -40,90 +36,34 @@ public class CollarController {
                             .parseClaimsJws(cookie.getValue())
                             .getBody();
                     String nickname = claims.getSubject();
-                    model.addAttribute("customer", getCustomer(nickname));
-                    model.addAttribute("wines", groupWinesByType(nickname));
+                    if(selectedSorting != null) {
+                        model.addAttribute("selectedSorting", selectedSorting);
+                    } else {
+                        model.addAttribute("selectedSorting", "Wine type");
+                    }
+                    String mode = (String) model.getAttribute("selectedSorting");
+                    model.addAttribute("customer", customerService.getCustomer(nickname));
+                    if(mode.equals(DEFAULT_SORTING_MODE)) {
+                        model.addAttribute("wines", wineService.groupWinesByType(nickname));
+                    } else {
+                        model.addAttribute("wines", wineService.sortWinesByMode(nickname, mode));
+                    }
                     },
                 () -> {
-                    throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect.");
+//                    throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect.");
+                    //throw is commented for quicker testing of collar page
+                    model.addAttribute("customer", customerService.getCustomer("tester"));
+                    if (selectedSorting != null) {
+                        model.addAttribute("selectedSorting", selectedSorting);
+                    }
+                    String mode = (String) model.getAttribute("selectedSorting");
+                    if(mode.equals(DEFAULT_SORTING_MODE)) {
+                        model.addAttribute("wines", wineService.groupWinesByType("tester"));
+                    } else {
+                        model.addAttribute("wines", wineService.sortWinesByMode("tester", mode));
+                    }
                 });
         return "collar";
-    }
-
-    private CustomerProfile getCustomer(String nickname) {
-
-
-        Customer customer = customerRepository.findByNickname(nickname).get();
-        List<Wine> wines = customer.getWines();
-        Map<String, List<Wine>> winesByRegion = wines.stream().collect(Collectors.groupingBy(Wine::getRegion));
-        String favoriteRegion = "";
-        int max = 0;
-        String favoriteCountry = "";
-        Map<String, List<Wine>> winesByCountry = wines.stream().collect(Collectors.groupingBy(Wine::getCountry));
-        String favoriteWinery= "";
-        Map<String, List<Wine>> winesByWinery = wines.stream().collect(Collectors.groupingBy(Wine::getWinery));
-        WineType favoriteWineType = WineType.SPARKLING;
-        Map<WineType, List<Wine>> winesByWineType = wines.stream().collect(Collectors.groupingBy(Wine::getWineType));
-        for(String region : winesByRegion.keySet()) {
-            int size = winesByRegion.get(region).size();
-            if(size > max) {
-                max = size;
-                favoriteRegion = region;
-            }
-        }
-        max = 0;
-        for(String country : winesByCountry.keySet()) {
-            int size = winesByCountry.get(country).size();
-            if(size > max) {
-                max = size;
-                favoriteCountry = country;
-            }
-        }
-        max = 0;
-        for(String winery: winesByWinery.keySet()) {
-            int size = winesByWinery.get(winery).size();
-            if(size > max) {
-                max = size;
-                favoriteWinery = winery;
-            }
-        }
-        max = 0;
-        for(WineType wineType : winesByWineType.keySet()) {
-            int size = winesByWineType.get(wineType).size();
-            if(size > max) {
-                max = size;
-                favoriteWineType = wineType;
-            }
-        }
-        return CustomerProfile.builder()
-                .id(customer.getId())
-                .nickname(customer.getNickname())
-                .numberOfWines(wines.size())
-                .numberOfRatings(customer.getRatings().size())
-                .wineWithOldestVintage(wines.stream().max((a,b) -> {
-                    if(a.getVintage().equals(b.getVintage())) {
-                        return 0;
-                    } else if(a.getVintage().isBefore(b.getVintage())) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                }).orElse(new Wine()))
-                .favoriteRegion(favoriteRegion)
-                .favoriteCountry(favoriteCountry)
-                .favoriteWinery(favoriteWinery)
-                .favoriteWineType(favoriteWineType)
-                .priceOfCollar(wines.stream().map(Wine::getPrice).reduce(String.valueOf(0), PriceSumming::sumPrice))
-                .build();
-    }
-    private Map<WineType, List<WineDTO>> groupWinesByType(String nickname) {
-//        return wineRepository.findAll().stream().filter(w -> w.getId() >= 741 && w.getId() <= 750).sorted(Comparator.comparing(Wine::getId)).collect(Collectors.groupingBy(Wine::getWineType));
-
-        Optional<Customer> opt = customerRepository.findByNickname(nickname);
-        if(opt.isPresent()) {
-            return opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getId)).map(wineMapper::wineToWineDTO).collect(Collectors.groupingBy(WineDTO::getWineType));
-        } else {
-            return new HashMap<>();
-        }
     }
     @GetMapping("/viewWine")
     @ResponseBody
