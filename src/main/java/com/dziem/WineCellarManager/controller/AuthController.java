@@ -3,6 +3,7 @@ package com.dziem.WineCellarManager.controller;
 import com.dziem.WineCellarManager.model.*;
 import com.dziem.WineCellarManager.repository.CustomerRepository;
 import com.dziem.WineCellarManager.repository.RoleRepository;
+import com.dziem.WineCellarManager.security.CookieService;
 import com.dziem.WineCellarManager.security.JWTGenerator;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class AuthController {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTGenerator jwtGenerator;
+    private final CookieService cookieService;
 
     @PostMapping("register")
     public ResponseEntity<String> register(@RequestBody RegisterDTO registerDTO) {
@@ -56,7 +58,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
         Cookie cookie = new Cookie(AUTHORIZATION_COOKIE_NAME, token);
-        setAuthorizationCookieAttributes(cookie);
+        cookieService.setAuthorizationCookieAttributes(cookie);
         cookie.setMaxAge(24 * 60 * 60); // 1 day (optional)
 
         response.addCookie(cookie);
@@ -64,24 +66,6 @@ public class AuthController {
     }
     @PostMapping("logout")
     public void logout(HttpServletResponse response, HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        boolean haveAuthCookie = false;
-        for(Cookie cookie : cookies) {
-            if(cookie.getName().equals(AUTHORIZATION_COOKIE_NAME)) {
-                haveAuthCookie = true;
-            }
-        }
-        if(haveAuthCookie) {
-            Cookie cookie = new Cookie(AUTHORIZATION_COOKIE_NAME, null);
-            setAuthorizationCookieAttributes(cookie);
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-        }
-    }
-
-    private static void setAuthorizationCookieAttributes(Cookie cookie) {
-        cookie.setHttpOnly(true); // HttpOnly flag
-        cookie.setSecure(true); // Only send over HTTPS
-        cookie.setPath("/"); // Cookie is available to the entire app
+        cookieService.deleteCookies(response, request);
     }
 }

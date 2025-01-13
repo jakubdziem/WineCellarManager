@@ -51,8 +51,6 @@ public class CollarController {
                     }
                     },
                 () -> {
-//                    throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect.");
-                    //throw is commented for quicker testing of collar page
                     model.addAttribute("customer", customerService.getCustomer("tester"));
                     if (selectedSorting != null) {
                         model.addAttribute("selectedSorting", selectedSorting);
