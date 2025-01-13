@@ -7,8 +7,9 @@ import com.dziem.WineCellarManager.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,5 +77,40 @@ public class WineServiceImpl implements WineService{
                     result.set(true);
                 }, () -> result.set(false));
         return result.get();
+    }
+
+    @Override
+    public Map<WineType, List<WineDTO>> groupWinesByType(String nickname) {
+        Optional<Customer> opt = customerRepository.findByNickname(nickname);
+        if(opt.isPresent()) {
+            return opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getId)).map(wineMapper::wineToWineDTO).collect(Collectors.groupingBy(WineDTO::getWineType));
+        } else {
+            return new HashMap<>();
+        }
+    }
+
+    @Override
+    public List<WineDTO> sortWinesByMode(String nickname, String mode) {
+        Optional<Customer> opt = customerRepository.findByNickname(nickname);
+        if(opt.isPresent()) {
+            return switch (mode) {
+                case "Winery" ->
+                        opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getWinery)).map(wineMapper::wineToWineDTO).toList();
+                case "Price" ->
+                        opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getPrice)).map(wineMapper::wineToWineDTO).toList();
+                case "Name" ->
+                        opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getName)).map(wineMapper::wineToWineDTO).toList();
+                case "Country" ->
+                        opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getCountry)).map(wineMapper::wineToWineDTO).toList();
+                case "Region" ->
+                        opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getRegion)).map(wineMapper::wineToWineDTO).toList();
+                case "Vintage" ->
+                        opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getVintage)).map(wineMapper::wineToWineDTO).toList();
+                default ->
+                        opt.get().getWines().stream().sorted(Comparator.comparing(Wine::getVintage)).map(wineMapper::wineToWineDTO).toList();
+            };
+        } else {
+            return new ArrayList<>();
+        }
     }
 }
