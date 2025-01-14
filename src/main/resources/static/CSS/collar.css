@@ -346,19 +346,33 @@
     color: gold; /* Highlight stars on hover */
 }
 
+#ratingPopUp {
+    width: auto; /* Ensure it takes full width within the parent */
+    min-width: 200px;
+    height: auto;
+}
+
+#ratingPopUp div #viewRatingDiv {
+    position: relative; /* Ensure the button is positioned relative to the parent div */
+    padding-bottom: 60px; /* Add padding to ensure the button doesn't overlap the content */
+}
+#lastInformationParagraph {
+    padding-bottom: 60px;
+}
 #ratingPopUp .cancel-button-rating {
     position: absolute;
-    bottom: 20px; /* Position at the bottom */
+    bottom: 20px; /* Position at the bottom of the parent div */
     left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Fine-tune horizontal centering */
-    background-color: #007bff; /* Red background for Close */
-    color: white;
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
 }
+
 .checked { /*rating stars*/
     color: gold;
     padding-right: 0 !important;

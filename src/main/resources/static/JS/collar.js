@@ -14,6 +14,8 @@ async function displayView(id) {
             <h5 class="card-title">${clickedWine.name} ${clickedWine.vintage}</h5>
             <p class="card-text">Localization: ${clickedWine.country}, ${clickedWine.region}</p>
             <p class="card-text">Winery: ${clickedWine.winery}</p>
+            <p class="card-text">Price: ${clickedWine.price}</p>
+           
             <div class="buttons">
                 <button onclick="cancelView()">Cancel</button>
            </div>
@@ -213,13 +215,12 @@ async function displayRatingPopup(id) {
         if (ratingData.hasRating) {
             // Display the existing rating (non-editable)
             ratingPopUp.innerHTML = `
-                <div>
-                    <h3>Rating Details</h3>
+                <div id="viewRatingDiv">
                     <p><strong>Stars:</strong> ${ratingData.ratingStars}</p>
-                    <p><strong>Flavour:</strong> <p><strong>Flavour:</strong> ${ratingData.flavour}</p></p>
+                    <p><strong>Flavour:</strong> ${ratingData.flavour}</p>
                     <p><strong>Aroma:</strong> ${ratingData.aroma}</p>
                     <p><strong>Aging Time:</strong> ${ratingData.agingTime} years</p>
-                    <p><strong>Suggested Food Pairings:</strong> ${ratingData.suggestedFoodPairings}</p>
+                    <p id="lastInformationParagraph"><strong>Suggested Food Pairings:</strong> ${ratingData.suggestedFoodPairings}</p>
                     <button class = "cancel-button-rating" onclick="cancelRating()">Close</button>
                     <button type="button" class="delete-button" onclick="deleteRating(${ratingData.id})">
                     🗑️
