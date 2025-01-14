@@ -14,8 +14,6 @@ public class JWTAuthEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-        System.out.println("Authentication error: " + authException.getMessage());
-
         response.sendRedirect("/login");
     }
 }
