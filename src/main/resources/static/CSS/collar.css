@@ -324,12 +324,16 @@
     justify-content: center; /* Center the rating stars */
 }
 
-#ratingOverlay .stars {
-    display: flex;
-    justify-content: center;
-    gap: 10px; /* Space between the stars */
-    font-size: 2rem; /* Larger stars */
-    cursor: pointer;
+.stars {
+    display: flex; /* Use flexbox for precise alignment */
+    gap: 0; /* Explicitly set no gap between items */
+}
+
+.stars span {
+    margin: 0;
+    padding: 0;
+    display: inline-block; /* Ensures the span elements are displayed on the same line */
+    vertical-align: middle; /* Adjusts vertical alignment */
 }
 
 #ratingOverlay .stars .star {
@@ -342,33 +346,6 @@
     color: gold; /* Highlight stars on hover */
 }
 
-/*#ratingOverlay .viewButtonReact button {*/
-/*    margin-top: 20px; !* Add some space between stars and button *!*/
-/*    padding: 10px 20px;*/
-/*    font-size: 1rem;*/
-/*    background-color: #007bff; !* Blue button *!*/
-/*    color: white;*/
-/*    border: none;*/
-/*    border-radius: 8px;*/
-/*    cursor: pointer;*/
-/*    transition: background-color 0.3s ease;*/
-/*}*/
-
-/*#ratingOverlay .viewButtonReact button:hover {*/
-/*    background-color: #0056b3; !* Darker blue on hover *!*/
-/*}*/
-/*#ratingPopUp .cancel-button-rating {*/
-/*    padding: 10px 30px; !* Uniform button size *!*/
-/*    font-size: 1rem;*/
-/*    background-color: #007bff; !* Blue color for buttons *!*/
-/*    color: white;*/
-/*    border: none;*/
-/*    border-radius: 8px;*/
-/*    cursor: pointer;*/
-/*    transition: background-color 0.3s ease;*/
-/*    width: 120px; !* Fixed button width for consistent size *!*/
-/*    text-align: center;*/
-/*}*/
 #ratingPopUp .cancel-button-rating {
     position: absolute;
     bottom: 20px; /* Position at the bottom */
@@ -384,6 +361,8 @@
 }
 .checked { /*rating stars*/
     color: gold;
+    padding-right: 0 !important;
+    margin-right: 0 !important;
 }
 .stars span{
     margin: 0;
