@@ -13,16 +13,18 @@ public class CookieServiceImpl implements CookieService {
     public void deleteCookies(HttpServletResponse response, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         boolean haveAuthCookie = false;
-        for(Cookie cookie : cookies) {
-            if(cookie.getName().equals(AUTHORIZATION_COOKIE_NAME)) {
-                haveAuthCookie = true;
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(AUTHORIZATION_COOKIE_NAME)) {
+                    haveAuthCookie = true;
+                }
             }
-        }
-        if(haveAuthCookie) {
-            Cookie cookie = new Cookie(AUTHORIZATION_COOKIE_NAME, null);
-            setAuthorizationCookieAttributes(cookie);
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
+            if (haveAuthCookie) {
+                Cookie cookie = new Cookie(AUTHORIZATION_COOKIE_NAME, null);
+                setAuthorizationCookieAttributes(cookie);
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
         }
     }
     @Override
