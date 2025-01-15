@@ -287,11 +287,40 @@ async function displayRatingPopup(id) {
                 event.preventDefault();
 
                 // Extract form values
-                const ratingStars = document.getElementById('ratingStars').value;
-                const flavour = document.getElementById('flavour').value;
-                const aroma = document.getElementById('aroma').value;
-                const agingTime = document.getElementById('agingTime').value;
-                const suggestedFoodPairings = document.getElementById('suggestedFoodPairings').value;
+                const ratingStars = document.getElementById('ratingStars').value.trim();
+                const flavour = document.getElementById('flavour').value.trim();
+                const aroma = document.getElementById('aroma').value.trim();
+                const agingTime = document.getElementById('agingTime').value.trim();
+                const suggestedFoodPairings = document.getElementById('suggestedFoodPairings').value.trim();
+
+                const errors = [];
+
+                if (ratingStars < 1 || ratingStars > 5) {
+                    errors.push("Stars must be between 1 and 5.");
+                }
+                if (aroma.length > 100) {
+                    errors.push("Aroma description must not exceed 100 characters.");
+                }
+                if (aroma.length <= 3) {
+                    errors.push("Aroma description must be longer than 3 characters.");
+                }
+                if (isNaN(agingTime) || agingTime < 0 || agingTime > 1000) {
+                    errors.push("Aging Time must be a number between 0 and 1000.");
+                }
+                if (suggestedFoodPairings.length > 100) {
+                    errors.push("Suggested Food Pairings must not exceed 100 characters.");
+                }
+                if (suggestedFoodPairings.length <= 3) {
+                    errors.push("Suggested Food Pairings must be longer than 3 characters.");
+                }
+                if (isNaN(agingTime) || agingTime < 0 || agingTime > 1000) {
+                    errors.push("Aging Time must be a number between 0 and 1000.");
+                }
+
+                if (errors.length > 0) {
+                    alert(errors.join("\n")); // Display validation errors
+                    return;
+                }
 
                 // Send the rating to the server
                 const token = localStorage.getItem('token');
@@ -482,16 +511,79 @@ async function displayAddWineForm(id) {
     addWineForm.addEventListener("submit", async function (event) {
         event.preventDefault();
 
+        const name = document.getElementById('name').value.trim();
+        const vintage = parseInt(document.getElementById('vintage').value.trim());
+        const imageUrl = document.getElementById('imageUrl').value.trim();
+        const country = document.getElementById('country').value.trim();
+        const region = document.getElementById('region').value.trim();
+        const winery = document.getElementById('winery').value.trim();
+        const price = document.getElementById('price').value.trim();
+
+
+        const currentYear = new Date().getFullYear();
+
+        const errors = [];
+
+        if (name.length > 50) {
+            errors.push("Name must not exceed 50 characters.");
+        }
+        if (name.length < 3) {
+            errors.push("Name must be at least 3 characters long.");
+        }
+
+        if (isNaN(vintage) || vintage < 1 || vintage > currentYear) {
+            errors.push(`Vintage must be a number between 1 and ${currentYear}.`);
+        }
+
+        const urlPattern = /^(https?:\/\/[^\s$.?#].[^\s]*)$/;
+        if (!urlPattern.test(imageUrl)) {
+            errors.push("Image URL must be a valid URL.");
+        }
+
+        if (country.length > 100) {
+            errors.push("Country must not exceed 100 characters.");
+        }
+        if (!/^[A-Z]/.test(country)) {
+            errors.push("Country must start with a capital letter.");
+        }
+        if (country.length < 3) {
+            errors.push("Country must be at least 3 characters long.");
+        }
+
+        if (region.length > 100) {
+            errors.push("Region must not exceed 100 characters.");
+        }
+        if (region.length < 3) {
+            errors.push("Region must be at least 3 characters long.");
+        }
+
+        if (winery.length > 100) {
+            errors.push("Winery must not exceed 100 characters.");
+        }
+        if (winery.length < 3) {
+            errors.push("Winery must be at least 3 characters long.");
+        }
+
+        const pricePattern = /^\$\d+(\.\d{1,2})?$/;
+        if (!pricePattern.test(price)) {
+            errors.push("Price must be in the format $8, $8.00, or $8.35.");
+        }
+
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+            return;
+        }
+
         // Extract form values
         const newWine = {
             customerId: id,
-            name: document.getElementById('name').value,
-            vintage: document.getElementById('vintage').value,
-            imageUrl: document.getElementById('imageUrl').value,
-            country: document.getElementById('country').value,
-            region: document.getElementById('region').value,
-            winery: document.getElementById('winery').value,
-            price: document.getElementById('price').value,
+            name,
+            vintage,
+            imageUrl,
+            country,
+            region,
+            winery,
+            price,
             wineType: document.getElementById('wineType').value,
         };
 
