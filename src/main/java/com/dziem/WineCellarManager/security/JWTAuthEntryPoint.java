@@ -14,6 +14,10 @@ public class JWTAuthEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-        response.sendRedirect("/login");
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+
+        String alertScript = "<script>alert('You need to login to access this site.'); window.location.href = '/login';</script>";
+        response.getWriter().write(alertScript);
     }
 }
