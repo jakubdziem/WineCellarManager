@@ -301,7 +301,7 @@ async function displayRatingPopup(id) {
                 if (aroma.length > 100) {
                     errors.push("Aroma description must not exceed 100 characters.");
                 }
-                if (aroma.length <= 3) {
+                if (aroma.length < 3) {
                     errors.push("Aroma description must be longer than 3 characters.");
                 }
                 if (isNaN(agingTime) || agingTime < 0 || agingTime > 1000) {
@@ -312,9 +312,6 @@ async function displayRatingPopup(id) {
                 }
                 if (suggestedFoodPairings.length <= 3) {
                     errors.push("Suggested Food Pairings must be longer than 3 characters.");
-                }
-                if (isNaN(agingTime) || agingTime < 0 || agingTime > 1000) {
-                    errors.push("Aging Time must be a number between 0 and 1000.");
                 }
 
                 if (errors.length > 0) {
@@ -541,27 +538,27 @@ async function displayAddWineForm(id) {
         }
 
         if (country.length > 100) {
-            errors.push("Country must not exceed 100 characters.");
+            errors.push("Country name must not exceed 100 characters.");
         }
         if (!/^[A-Z]/.test(country)) {
-            errors.push("Country must start with a capital letter.");
+            errors.push("Country name must start with a capital letter.");
         }
         if (country.length < 3) {
-            errors.push("Country must be at least 3 characters long.");
+            errors.push("Country name must be at least 3 characters long.");
         }
 
         if (region.length > 100) {
-            errors.push("Region must not exceed 100 characters.");
+            errors.push("Region name must not exceed 100 characters.");
         }
         if (region.length < 3) {
-            errors.push("Region must be at least 3 characters long.");
+            errors.push("Region name must be at least 3 characters long.");
         }
 
         if (winery.length > 100) {
-            errors.push("Winery must not exceed 100 characters.");
+            errors.push("Winery name must not exceed 100 characters.");
         }
         if (winery.length < 3) {
-            errors.push("Winery must be at least 3 characters long.");
+            errors.push("Winery name must be at least 3 characters long.");
         }
 
         const pricePattern = /^\$\d+(\.\d{1,2})?$/;
