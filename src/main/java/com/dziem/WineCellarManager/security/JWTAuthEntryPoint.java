@@ -17,7 +17,10 @@ public class JWTAuthEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
 
-        String alertScript = "<script>alert('You need to login to access this site.'); window.location.href = '/login';</script>";
+        String alertScript = "<script>" +
+                "alert('You need to login to access this site.'); " +
+                "window.location.href = '/login'; " +
+                "localStorage.removeItem('token');</script>";
         response.getWriter().write(alertScript);
     }
 }
