@@ -70,7 +70,7 @@ public class WineServiceImpl implements WineService{
                             .region(winePostDTO.getRegion())
                             .winery(winePostDTO.getWinery())
                             .price(winePostDTO.getPrice())
-                            .wineType(winePostDTO.getWineType())
+                            .wineType(WineType.valueOf(winePostDTO.getWineType()))
                             .build();
                     existing.getWines().add(wine);
                     customerRepository.save(existing);

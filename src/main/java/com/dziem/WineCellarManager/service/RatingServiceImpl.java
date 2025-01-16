@@ -1,9 +1,6 @@
 package com.dziem.WineCellarManager.service;
 
-import com.dziem.WineCellarManager.model.Rating;
-import com.dziem.WineCellarManager.model.RatingGetDTO;
-import com.dziem.WineCellarManager.model.RatingPostDTO;
-import com.dziem.WineCellarManager.model.Wine;
+import com.dziem.WineCellarManager.model.*;
 import com.dziem.WineCellarManager.repository.RatingRepository;
 import com.dziem.WineCellarManager.repository.WineRepository;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +51,7 @@ public class RatingServiceImpl implements RatingService {
                             .builder()
                             .customer(existing.getCustomer())
                             .ratingStars(ratingPostDTO.getRatingStars())
-                            .flavour(ratingPostDTO.getFlavour())
+                            .flavour(Flavour.valueOf(ratingPostDTO.getFlavour()))
                             .aroma(ratingPostDTO.getAroma())
                             .agingTime(ratingPostDTO.getAgingTime())
                             .suggestedFoodPairings(ratingPostDTO.getSuggestedFoodPairings())
