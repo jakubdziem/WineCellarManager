@@ -1,11 +1,11 @@
 async function displayView(id) {
-    // Fetch the clicked wine from the server
+
     const response = await fetch('/viewWine?id=' + id);
 
     if (response.ok) {
-        const clickedWine = await response.json(); // Parse the JSON response
+        const clickedWine = await response.json();
 
-        // Get the overlay and view modal elements
+
         const overlay = document.getElementById("overlay");
         const viewPopUp = document.getElementById("view");
 
@@ -22,10 +22,10 @@ async function displayView(id) {
 `;
 
 
-        // Log the clicked wine to the console for debugging
+
         console.log(clickedWine);
 
-        // Show the modal by adding the 'active' class
+
         overlay.classList.add("active");
         viewPopUp.classList.add("active");
     } else {
@@ -43,7 +43,7 @@ function cancelView() {
     viewPopUp.classList.remove("active");
 }
 
-// Close popup when clicking outside of it
+
 document.getElementById("overlay").addEventListener("click", function (event) {
     if (!event.target.closest("#view")) {
         cancelView();
@@ -63,28 +63,26 @@ document.getElementById("deleteDecisionOverlay").addEventListener("click", funct
 function restoreScrollPosition() {
     const savedScrollPosition = sessionStorage.getItem('scrollPosition');
     if (savedScrollPosition !== null) {
-        // Restore the scroll position
+
         window.scrollTo(0, savedScrollPosition);
-        sessionStorage.removeItem('scrollPosition');  // Clear saved position
+        sessionStorage.removeItem('scrollPosition');
     }
 }
 
-// Call this function when the page is loaded
+
 window.onload = function() {
     restoreScrollPosition();
 };
 async function displayEdit(id) {
-    // Fetch the clicked wine details
+
     const response = await fetch('/viewWine?id=' + id);
 
     if (response.ok) {
         const clickedWine = await response.json();
 
-        // Get the overlay and edit modal elements
         const overlay = document.getElementById("editOverlay");
         const editPopUp = document.getElementById("edit");
 
-        // Populate the modal with a form
         editPopUp.innerHTML = `
             <h5>Edit Wine</h5>
             <form id="editForm">
@@ -136,7 +134,6 @@ async function displayEdit(id) {
 
         `;
 
-        // Show the modal
         overlay.classList.add("active");
         editPopUp.classList.add("active");
     } else {
@@ -151,7 +148,6 @@ function cancelEdit() {
     editPopUp.classList.remove("active");
 }
 
-// Save the Edited Data
 async function saveEdit(id) {
     const form = document.getElementById("editForm");
     const updatedWine = {
@@ -184,7 +180,6 @@ async function saveEdit(id) {
 }
 
 async function rateWine(id, stars) {
-    // Send POST request to save the rating
     const token = localStorage.getItem('token');
     const response = await fetch('/rateWine', {
         method: 'POST',
@@ -197,15 +192,14 @@ async function rateWine(id, stars) {
 
     if (response.ok) {
         console.log(`Wine ${id} rated with ${stars} stars`);
-        location.reload(); // Refresh the page to reflect the updated rating
+        location.reload();
     } else {
         console.error('Error saving rating');
     }
 }
 
 async function displayRatingPopup(id) {
-    // Fetch the wine details and its rating
-    const response = await fetch(`/getWineRating?wineId=${id}`); // Adjust the endpoint accordingly
+    const response = await fetch(`/getWineRating?wineId=${id}`);
 
     if (response.ok) {
         const ratingData = await response.json(); // Expect { hasRating: true/false, ratingStars, flavour, aroma, agingTime, suggestedFoodPairings } }
@@ -213,7 +207,6 @@ async function displayRatingPopup(id) {
         const ratingPopUp = document.getElementById("ratingPopUp");
 
         if (ratingData.hasRating) {
-            // Display the existing rating (non-editable)
             ratingPopUp.innerHTML = `
                 <div id="viewRatingDiv">
                     <p><strong>Stars:</strong> ${ratingData.ratingStars}</p>
@@ -228,7 +221,6 @@ async function displayRatingPopup(id) {
                 </div>
             `;
         } else {
-            // Display the form for submitting a rating
             ratingPopUp.innerHTML = `
                 <div>
                     <h3>Submit Your Rating</h3>
@@ -281,12 +273,10 @@ async function displayRatingPopup(id) {
                 </div>
             `;
 
-            // Add form submission logic
             const ratingForm = document.getElementById('ratingForm');
             ratingForm.addEventListener('submit', async function (event) {
                 event.preventDefault();
 
-                // Extract form values
                 const ratingStars = document.getElementById('ratingStars').value.trim();
                 const flavour = document.getElementById('flavour').value.trim();
                 const aroma = document.getElementById('aroma').value.trim();
@@ -315,11 +305,10 @@ async function displayRatingPopup(id) {
                 }
 
                 if (errors.length > 0) {
-                    alert(errors.join("\n")); // Display validation errors
+                    alert(errors.join("\n"));
                     return;
                 }
 
-                // Send the rating to the server
                 const token = localStorage.getItem('token');
                 const response = await fetch('/submitWineRating', {
                     method: 'POST',
@@ -339,15 +328,14 @@ async function displayRatingPopup(id) {
 
                 if (response.ok) {
                     console.log('Rating submitted successfully!');
-                    cancelRating(); // Close the modal
-                    location.reload(); // Reload the page to reflect changes
+                    cancelRating();
+                    location.reload();
                 } else {
                     console.error('Error submitting rating');
                 }
             });
         }
 
-        // Show the modal
         overlay.classList.add("active");
         ratingPopUp.classList.add("active");
     } else {
@@ -366,11 +354,9 @@ async function deleteRating(id) {
     });
 
     if (response.ok) {
-        // Successfully deleted the wine, close the modal
         console.log("Rating deleted successfully");
         cancelRating();
 
-        // Optionally, refresh the page or remove the deleted wine from the DOM
         location.reload();
     } else {
         console.error("Error deleting rating");
@@ -380,12 +366,10 @@ function cancelRating() {
     const overlay = document.getElementById("ratingOverlay");
     const ratingPopUp = document.getElementById("ratingPopUp");
 
-    // Hide the modal
     overlay.classList.remove("active");
     ratingPopUp.classList.remove("active");
 }
 
-// Close the popup when clicking outside of it
 document.getElementById("ratingOverlay").addEventListener("click", function (event) {
     if (!event.target.closest("#ratingPopUp")) {
         cancelRating();
@@ -394,11 +378,9 @@ document.getElementById("ratingOverlay").addEventListener("click", function (eve
 
 
 function deleteWine(id) {
-    // Get the overlay and delete confirmation modal elements
     const overlay = document.getElementById("deleteDecisionOverlay");
     const deletePopUp = document.getElementById("deleteDecision");
 
-    // Populate the delete confirmation modal
     deletePopUp.innerHTML = `
         <h5>Are you sure you want to delete this wine?</h5>
         <div class="buttons">
@@ -407,25 +389,20 @@ function deleteWine(id) {
         </div>
     `;
 
-    // Show the modal by adding the 'active' class
     overlay.classList.add("active");
     deletePopUp.classList.add("active");
 }
 
-// Cancel Delete Action
 function cancelDelete() {
     const overlay = document.getElementById("deleteDecisionOverlay");
     const deletePopUp = document.getElementById("deleteDecision");
 
-    // Hide the modal by removing the 'active' class
     overlay.classList.remove("active");
     deletePopUp.classList.remove("active");
 }
 
-// Confirm Delete Action
 async function confirmDelete(id) {
     const token = localStorage.getItem('token');
-    // Send a delete request to the server
     const response = await fetch('/deleteWine?id=' + id, {
         headers: {
             'Authorization': token
@@ -434,22 +411,18 @@ async function confirmDelete(id) {
     });
 
     if (response.ok) {
-        // Successfully deleted the wine, close the modal
         console.log("Wine deleted successfully");
         cancelDelete();
 
-        // Optionally, refresh the page or remove the deleted wine from the DOM
         location.reload();
     } else {
         console.error("Error deleting wine");
     }
 }
 async function displayAddWineForm(id) {
-    // Get the overlay and add modal elements
     const overlay = document.getElementById("addOverlay");
     const addPopUp = document.getElementById("add");
 
-    // Populate the modal with a form for adding a new wine
     addPopUp.innerHTML = `
         <h5>Add Wine</h5>
         <form id="addWineForm">
@@ -499,11 +472,9 @@ async function displayAddWineForm(id) {
         </form>
     `;
 
-    // Show the modal
     overlay.classList.add("active");
     addPopUp.classList.add("active");
 
-    // Add form submission logic
     const addWineForm = document.getElementById("addWineForm");
     addWineForm.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -571,7 +542,6 @@ async function displayAddWineForm(id) {
             return;
         }
 
-        // Extract form values
         const newWine = {
             customerId: id,
             name,
@@ -584,7 +554,6 @@ async function displayAddWineForm(id) {
             wineType: document.getElementById('wineType').value,
         };
 
-        // Send the data to the server
         const token = localStorage.getItem('token');
         const response = await fetch('/addWine', {
             method: 'POST',
@@ -598,8 +567,8 @@ async function displayAddWineForm(id) {
         if (response.ok) {
             console.log("Wine added successfully!");
 
-            cancelAdd(); // Close the modal
-            location.reload(); // Refresh the page to reflect changes
+            cancelAdd();
+            location.reload();
         } else {
             console.error("Error adding wine");
         }

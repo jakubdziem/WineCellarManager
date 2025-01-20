@@ -1,11 +1,11 @@
 function redirectToSearch(event) {
-    event.preventDefault(); // Prevent the default form submission
-    const inputValue = document.getElementById("searchInput").value; // Get the value of the input field
+    event.preventDefault();
+    const inputValue = document.getElementById("searchInput").value;
     if (inputValue.trim() !== "") {
         console.log(`/otherCollars/${encodeURIComponent(inputValue)}`)
-        window.location.href = `/otherCollars/${encodeURIComponent(inputValue)}`; // Redirect to the new URL with the input value
+        window.location.href = `/otherCollars/${encodeURIComponent(inputValue)}`;
     } else {
-        alert("Please enter a search term."); // Optional: Alert if the input is empty
+        alert("Please enter a search term.");
     }
 }
 
@@ -28,7 +28,6 @@ async function displayRatingPopup(id) {
         const ratingPopUp = document.getElementById("ratingPopUp");
 
         if (ratingData.hasRating) {
-            // Display the existing rating (non-editable)
             ratingPopUp.innerHTML = `
                 <div id="viewRatingDiv">
                     <p><strong>Stars:</strong> ${ratingData.ratingStars}</p>

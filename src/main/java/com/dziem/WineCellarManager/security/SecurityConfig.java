@@ -25,7 +25,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF protection
+                .csrf(csrf -> csrf.disable())
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint(jwtAuthEntryPoint)
                 )
@@ -33,18 +33,16 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**").permitAll() // Permit all for auth endpoints
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/collar").authenticated()
                         .requestMatchers(HttpMethod.GET).permitAll()
-                        .anyRequest().authenticated() // Authenticate all other requests
+                        .anyRequest().authenticated()
                 )
-                .httpBasic(withDefaults()); // Use HTTP Basic authentication
+                .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
             return http.build();
         }
-
-
-        @Bean
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
