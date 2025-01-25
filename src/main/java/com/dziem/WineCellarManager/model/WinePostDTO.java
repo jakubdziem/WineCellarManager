@@ -17,7 +17,7 @@ public class WinePostDTO {
     private UUID customerId;
 
     @NotBlank(message="Name is mandatory")
-    @Size(min = 3, max = 50, message = "Name must be in range from 3 to 50")
+    @Size(min = 3, max = 100, message = "Name must be in range from 3 to 100")
     private String name;
 
     @VintageValidator(message = "Vintage must be a number between 1 and current year")

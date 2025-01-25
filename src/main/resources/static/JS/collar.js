@@ -492,8 +492,8 @@ async function displayAddWineForm(id) {
 
         const errors = [];
 
-        if (name.length > 50) {
-            errors.push("Name must not exceed 50 characters.");
+        if (name.length > 100) {
+            errors.push("Name must not exceed 100 characters.");
         }
         if (name.length < 3) {
             errors.push("Name must be at least 3 characters long.");
