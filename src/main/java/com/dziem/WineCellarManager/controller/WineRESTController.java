@@ -19,7 +19,7 @@ public class WineRESTController {
         return wineService.getClickedWineById(id);
     }
     @PutMapping(value = "/updateWine", consumes = "application/json")
-    public ResponseEntity<Void> updateClickedWineById(@RequestBody WineDTO wine) {
+    public ResponseEntity<Void> updateClickedWineById(@Validated @RequestBody WineDTO wine) {
         if(wineService.updateClickedWineById(wine)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
